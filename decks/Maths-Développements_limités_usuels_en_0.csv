@@ -1,0 +1,11 @@
+﻿\(\frac{1}{1-x} \underset{x \to 0}{=}\);\(1+x+x^2+x^3+\dots+x^n+o(x^n)\);
+\(\frac{1}{1+x} \underset{x \to 0}{=}\);\(1-x+x^2-x^3+ \dots+(-1)^nx^n+o(x^n)\);
+\(e^x \underset{x \to 0}{=}\);\(1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\dots+\frac{x^n}{n!}+o(x^n)\);
+\(\ln(1+x) \underset{x \to 0}{=}\);\(x-\frac{x^2}{2}+\frac{x^3}{3}-\dots+(-1)^{n+1}\frac{x^n}{n}+o(x^n)\);
+\(\sin(x) \underset{x\to 0}{=}\);\(x-\frac{x^3}{3!}+\frac{x^5}{5!}-\dots+(-1)^n\frac{x^{2n+1}}{(2n+1)!}+o(x^n)\);
+\(\text{sh}\, x \underset{x \to 0}{=}\);\(x+\frac{x^3}{3!}+\frac{x^5}{5!}+\dots+\frac{x^{2n+1}}{(2n+1)!}+o(x^n)\);
+\(\cos(x) \underset{x \to 0}{=}\);\(1-\frac{x^2}{2!}+\frac{x^4}{4!}-\dots+(-1)^n\frac{x^{2n}}{(2n)!}+o(x^n)\);
+\(\text{ch} \, x \underset{x \to 0}{=}\);\(1+\frac{x^2}{2!}+\frac{x^4}{4!}+\dots+\frac{x^{2n}}{(2n)!}+o(x^n)\);
+\((1+x)^{\alpha} \underset{x \to 0}{=}\);\(1+\alpha x+\frac{\alpha(\alpha-1)}{2!}x^2+\dots+\frac{\alpha(\alpha-1)\dots(\alpha-n+1)}{n!}x^n+o(x^n)\);
+\(\text{Arctan} \, x \underset{x \to 0}{=}\);\(x-\frac{x^3}{3} + \frac{x^5}{5}-\dots+(-1)^n \frac{x^{2n+1}}{2n+1}+o(x^n)\);
+\(\tan x \underset{x \to 0}{=}\);\(x+\frac{x^3}{3}+o(x^3)\);

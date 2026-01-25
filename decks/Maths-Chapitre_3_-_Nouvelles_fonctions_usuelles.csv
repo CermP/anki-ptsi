@@ -1,0 +1,24 @@
+﻿\(\text{ch}(x)=\);\(\frac{e^x+e^{-x}}{2}\);
+\(\text{sh}(x)=\);\(\frac{e^x-e^{-x}}{2}\);
+Relation avec \(\text{ch}^2(x)\)et \(\text{sh}^2(x)\);\(\text{ch}^2(x)-\text{sh}^2(x)=1\);
+avec \(\text{ch}(x)\) et \(\text{sh}(x)\), \(e^x=\);\(\text{ch}(x)+\text{sh}(x)\);
+\(\text{ch}'=\);\(\text{sh}\);;
+\(\text{sh}'=\);\(\text{ch}\);;
+Soit \(f : I \to \mathbb{R}\) réalisant une bijection de \(I\) sur \(J\).<br>Soit \(y \in J\). On pose \(x=f^{-1}(y)\)(de sorte que \(y = f(x)\))<br>On suppose \(f\) {{c1::dérivable en \(x \)}}, alors :<br>\(f^{-1}\){{c2::dérivable en \(y\) }}  \( \iff f'(x) \neq 0 \), ie \(f'(f^{-1}(y)) \neq 0\)<br>et dans ce cas, on a {{c3::\((f^{-1})'(y)= \frac{1}{f'(x)}\) }}i.e. {{c3::\((f^{-1} )'(y) = \frac{1}{f'(f^{-1}(y))}\)}}<br><br>Rq: En particulier, si \(f \) est dérivable sur \(I\) et que \(f' \) ne s'annule jamais sur \(I\), alors \(f^{-1}\) est {{c4::dérivable sur \(J\) et}} \((f^{-1})' = \) {{c4::\(\frac{1}{f' \circ f^{-1}}\)}};;
+"La fonction \(\text{Arcsin}\) est définie sur {{c2:: \([-1,1]\) }} à valeurs dans {{c3::\(\left[ -\frac{\pi}{2} , \frac{\pi}{2}  \right]\)}} et elle est continue et {{c4::strictement croissante}} sur sur {{c4::{{c2:: \([-1,1]\) }}}}. \(\text{Arcsin}\) est la reciproque de : {{c1::\(\begin{aligned}
+f : \left[ -\frac{\pi}{2} , \frac{\pi}{2}  \right] &\to [-1,1] \\
+x &\mapsto \sin(x)
+\end{aligned}\)}}";;
+\(\forall x \in\) {{c4::\( \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right]\)}}  , \(\forall y \in\)  {{c3::\([-1,1]\)}}  , {{c2:: \(y=\sin x\) }}\(\iff\){{c1::\(x= \text{Arcsin}(y)\)}} ;;
+Soit \(x \in ]-1,1[\) \(\text{Arcsin}'(x)=\);\(\frac{1}{\sqrt{1-x^2}}\);;
+\(\forall y \in [-1,1], \) \(\cos(\text{Arcsin}(y))=  \ ?\) et aussi \(\forall y \in [-1,1], \) \(\sin(\text{Arccos}(y))= \ ?\);\(\sqrt{1-y^2}\);;
+\(\forall x \in\) {{c4::\( \left[ 0, \pi \right]\)}}  , \(\forall y \in\)  {{c3::\([-1,1]\)}}  , {{c2:: \(y=\cos x\) }}\(\iff\){{c1::\(x= \text{Arccos}(y)\)}} ;;
+La fonction {{c3::\(\text{Arccos}\) }}est définie sur \([-1,1]\) à valeurs dans {{c2::\([0,\pi]\)}} et elle y est continue et {{c1::strictement décroissante}};;
+Soit \(x \in ]-1,1[\) \(\text{Arccos}'(x)=\);\(-\frac{1}{\sqrt{1-x^2}}\);;
+\(\forall x \in\) {{c4: \(\left] -\frac{\pi}{2},\frac{\pi}{2}\right[\) }}  , \(\forall y \in\)  {{c3::\(\mathbb{R}\)}}  , {{c2:: \(y=\tan x\) }}\(\iff\){{c1::\(x= \text{Arctan}(y)\)}} ;;
+La fonction \(\text{Arctan} \) est définie et continue sur {{c2::\(\mathbb{R}\)}}, à valeurs dans {{c3::\( \left] -\frac{\pi}{2}, \frac{\pi}{2} \right[\)}}, et {{c1::strictement croissante}};;
+\(\text{Arctan}'(x)=\);\(\frac{1}{1+x^2}\);;
+\(\forall x \in \mathbb{R}_+^*, \text{Arctan} \, x + \text{Arctan} \, \frac{1}{x} =\)<br><br>\(\forall x \in \mathbb{R}_-^*, \text{Arctan} \, x + \text{Arctan} \, \frac{1}{x} =\);"\(\forall x \in \mathbb{R}_+^*, \text{Arctan} \, x + \text{Arctan} \, \frac{1}{x} =\frac{\pi}{2}\)<br><br>\(\forall x \in \mathbb{R}_-^*, \text{Arctan} \, x + \text{Arctan} \, \frac{1}{x} =-\frac{\pi}{2}\)<br><br>Preuve :<br>\(\begin{aligned}
+g : \mathbb{R}_+^* &\to \left[-\frac{\pi}{2} , \frac{\pi}{2}\right]\\
+x &\mapsto \text{Arctan} \, x + \text{Arctan} \, \frac{1}{x} 
+\end{aligned}\)<br>\(g\) est dérivable sur \(\mathbb{R}_+^*\) par quotient, composition et somme :<br>\(g'(x) = \frac{1}{1+x^2} - \frac{1}{x^2} \cdot \text{Arctan}' \frac{1}{x} \)<br>\(= \frac{1}{1+x^2} - \frac{1}{x^2} \cdot \frac{1}{1+(\frac{1}{x})^2} \)<br>\(= \frac{1}{1+x^2} - \frac{1}{x^2+\frac{x^2}{x^2}}=\frac{1}{1+x^2} - \frac{1}{x^2+1}=0  \)<br>Ainsi, \(\forall x \in \mathbb{R}_+^*, g'(x) =0\), comme \(\mathbb{R}_+^*\) est un intervalle, \(\exists c \in \mathbb{R} ,  \, g(x)=c\)<br>En particulier, \(g(1)=c\) i.e. \(\text{Arctan} (1)+\text{Arctan}(\frac{1}{1})=c\)<br>i.e. \(\frac{\pi}{4} +\frac{\pi}{4} =c\)<br><br>d'où \(c= \frac{\pi}{2}\)<br><br>Ainsi, \(\forall x \in \mathbb{R}_+^*, \, \text{Arctan}(x)+\text{Arctan}(\frac{1}{x})= \frac{\pi}{2}\)";

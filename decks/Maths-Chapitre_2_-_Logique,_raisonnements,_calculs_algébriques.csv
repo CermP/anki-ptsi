@@ -1,0 +1,24 @@
+﻿Lois de Morgan :<br>\(non(P\, et \,Q) \iff\);\(non(P) \ ou\  non(Q)\);
+Lois de Morgan :<br>\(non(P\ ou \ Q) \iff\);\(non(P) \ et\  non(Q)\);
+\(non(P \implies Q) \iff\);\(P \ et  \ non(Q)\);
+réciproque de \(P \implies Q\);\(Q \implies P\);
+Contaposée de \(P \implies Q\);\(non(Q) \implies non(P)\) (de plus une implication équivaut à sa contréposée);
+\(\binom{n}{k}=\);\(\frac{n!}{k!(n-k)!}\)=;;
+\(\binom{n}{0}=\){{c2::\(\binom{n}{n}\)}}{{c1::\(=1\)}};;
+\(\binom{n}{1}=\){{c2::\(\binom{n}{n-1}\)}}{{c1::\(=n\)}};;
+\(\binom{n}{2}=\);\(\frac{n(n-1)}{2}=\);;
+\(\forall \, p \in \left\{0,\ldots,n\right\}\), \(\binom{n}{n-p}=\);\(\binom{n}{p}\);
+\(\forall \, n \geq2 ,\  \forall \, p \in \left\{1,\ldots,n-1\right\}\), \(\binom{n}{p}=\);"\(\binom{n-1
+}{p} + \binom{n-1}{p-1}\)";
+\(\sum_{k=p}^{n}a=\);\((n-p+1)a\);
+\(\sum_{k=1}^{n}k=\);\(\frac{n(n+1)}{2}\);
+\(\sum_{k=0}^{n}k^2=\);\(\frac{n(n+1)(2n+1)}{6}\);
+\(\sum_{k=0}^{n}q^k=\);\( \begin{cases} \frac{1-q^{n+1}}{1-q} & \text{si } q \neq 1 \\ n+1 & \text{si} \ q =1 \end{cases} \);
+Formule du binôme :<br>\((a+b)^n\);\(\sum_{k=0}^{n}\binom{n}{k}a^{n-k} \cdot b^k\);;
+\(a^n-b^n\);\((a-b)\sum_{k=0}^{n-1}a^{n-1-k} \cdot b^k\) ou \((a-b)\sum_{k=0}^{n-1}a^{k} \cdot b^{n-1-k}\);;
+{{c3:: \(\sum u_{i,j} = \) }}{{c2::\(= \sum_{i=1}^{n} \left( \sum_{j=1}^{p} u_{i,j} \right) = \)}}{{c1::\( \sum_{j=1}^{p} \left( \sum_{i=1}^{n} u_{i,j} \right)\)}};;
+{{c2::\(\sum_{1 \leq i \leq j \leq n}u_{i,j}=\)}}{{c1::\(\sum_{j=1}^{n} \left( \sum_{i=1}^{j} u_{i,j} \right)=\)}}{{c1::\(\sum_{i=1}^{n} \left( \sum_{j=i}^{n} u_{i,j} \right)\)}};;
+{{c2::\(\left|\sum_{k=1}^{n}x_k\right|\)}}\(\leq\){{c1::\(\sum_{k=1}^{n}\left|x_k\right|\)}};;
+\(\prod_{k=1}^{n}\lambda u_k=\);\(\lambda^n \prod_{k=1}^{n}u_k\);
+\(\prod_{k=1}^{n}\exp (u_k)\);\(\exp\left(\sum_{k=1}^{n}u_k\right)\);;
+\(\ln \left(\prod_{k=1}^{n} u_k \right)\);\(\sum_{k=1}^{n}\ln(u_k)\);;

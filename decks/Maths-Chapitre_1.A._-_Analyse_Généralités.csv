@@ -1,0 +1,16 @@
+﻿Partie \(A\) de \(\mathbb{R}\) bornée (écriture avec symbole);\(\exists\ K\in\mathbb{R}^{+},\ \forall\ x \in A,\, \left|x\right| \leq K\);;
+Soit \(f : D\to\mathbb{R}\, , \quad f\) est impaire si  ;Soit \(f : D\to\mathbb{R}\, ,\quad\) \(\forall x \in D, \, f(-x)=-f(x)\). ;Que peut on dire de f ?;
+Soit \(f : D\to\mathbb{R}\, , \quad f\) est paire si  ;Soit \(f : D\to\mathbb{R}\, ,\quad\) \(\forall x \in D, \, f(-x)=f(x)\). ;Que peut on dire de f ?;
+f est T-périodique;\(\forall x \in D,\,\forall k\in \mathbb{Z},\, f(x+kT)=f(x)\);;
+Soit \(x_0\in \mathbb{R}\), La droite d'équation \(x=x_0\) est asymptote verticale à \(C\) de f si ...;\(\lim_{x\to x_0}f(x)=\pm \infty\) (ou \(\lim_{x\to x_0^+}f(x)=\pm \infty\), ou\(\lim_{x\to x_0^-}f(x)=\pm \infty\)) (Que peut-on dire graphiquement ?);;
+Soit \(b\in \mathbb{R}\), la droite d'équation \(y=b\) est asymptote horizontale à C de f en \(\pm \infty\) si ...;\(\lim_{x\to + \infty} f(x) = b\) (Que peut-on dire graphiquement);;
+Soit \(a \in \mathbb{R^*}\) et \( b\in \mathbb{R}\), on dit que la droite d'équation \(y=ax+b\) est asymptote oblique à \(C\) de f en \(\pm \infty\) si ...;\(\lim_{x \to \pm \infty}f(x) -(ax+b)=0\) (que peut-on dire graphiquement);;
+Soient \(E\) et \(F\) deux ensembles, et \(f:E \to F\). On dit que f est {{c1::bijective}} si {{c2::\(\forall y \in F,\, \exists! x \in E,\, y=f(x)\)}};;
+\(f\) continue en a si;\(\lim_{x\to a }f(x)=f(a)\) (que peut-on dire de f en a);;
+Théorème de la bijection<br>Soit \(f\) une fonction définie sur \(I\), à valeurs réelles, telle que :<br><ul><li>{{c3::\(I\) soit un intervalle}}<br></li><li>{{c3::\(f\) est continue sur \(I\)}}<br></li><li>{{c3::\(f\) est strictement montone sur \(I\)}}<br></li></ul><div>Alors, f {{c2::réalise une bijection}} de \(I\) sur l'intervalle \(f(I)\)</div>De plus \(f^{-1} : f(I) \to I \) est continue sur \(f(I)\), strictement monotone, de même {{c1::monotonie}} que \(f\)<br><br>;;
+On dit que \(f\) est dérivable en \(a\) si;le taux d'accroissement de \(f\) en \(a\), \(\frac{f(x)-f(a)}{x-a}\), admet une limite <u>finie</u> quand \(x\) tend vers \(a\);
+Si \(\forall\, x \in I, \, f'(x) \geq 0 , \) et si \(f'\) {{c2::ne s'annule qu'un nombre fini de fois}}, alors \(f\) est {{c1::strictement croissante sur \(I\)}};;
+\(\forall \, x \in ]-1, +\infty[\), {{c3::\(\ln(1+x)\)}}{{c2::\(\leq\)}}{{c1::\(x\)}} ;;
+\(\forall \, x \in \mathbb{R}\), {{c3::\(\exp(x)\)}}{{c2::\(\geq\)}}{{c1::\(1+x\)}};;
+\(\forall \, x \in \mathbb{R}\), {{c3::\(\left|\sin(x)\right|\)}}{{c2::\(\leq\)}}{{c1::\(\left|x\right|\)}};;
+\(\forall \, x \in I, f'(x)=0\) , que peut-on dire de \(f\) ?;\(f \)<b> est constante sur </b>\(I\) (ie : \(\exists \,c \in \mathbb{R}, \, \forall\, x\in I, f(x) =c\)), (que peut-on dire de sa dérivée ?);;
