@@ -98,14 +98,14 @@ def save_html(data):
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #8fbcbb 0%, #5e81ac 100%);
+            background: #2e3440;
             min-height: 100vh;
             padding: 2rem;
         }}
         .container {{
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: #3b4252;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
@@ -175,13 +175,13 @@ def save_html(data):
             color: #718096;
         }}
         footer {{
-            background: #f8f9fa;
+            background: #4c566a;
             padding: 2rem;
             text-align: center;
-            color: #718096;
-            border-top: 1px solid #e2e8f0;
+            color: #b48ead;
+            border-top: 1px solid #d8dee9;
         }}
-        footer a {{ color: #667eea; text-decoration: none; font-weight: 600; }}
+        footer a {{ color: #434c5e; text-decoration: none; font-weight: 600; }}
         footer a:hover {{ text-decoration: underline; }}
         @media (max-width: 600px) {{
             h1 {{ font-size: 1.8rem; }}
