@@ -1,7 +1,18 @@
 # 📚 Flashcards PTSI Collaboratives
-## 📥 Télécharger les Decks (sans Anki installé)
 
-Les fichiers `.apkg` sont **générés automatiquement** à chaque mise à jour du repo !
+## 🌐 Télécharger les Decks (Recommandé)
+
+### 👉 **[Page de téléchargement avec decks individuels](https://cermp.github.io/anki-ptsi/)**
+
+Tous les decks sont disponibles **individuellement** sur notre site web !
+- ✅ Téléchargement direct de chaque deck `.apkg`
+- ✅ Organisés par matière (Maths, SI, Physique, Chimie, Anglais)
+- ✅ Mis à jour automatiquement à chaque push
+- ✅ Aucune installation requise
+
+---
+
+## 📦 Méthode Alternative (tous les decks en un seul zip)
 
 ### 👉 Lien de téléchargement direct (Dernière version)
 [**📥 Télécharger tous les decks (.zip)**](https://nightly.link/CermP/anki-ptsi/workflows/build_decks.yml/main/anki-decks.zip)
@@ -81,12 +92,25 @@ python3 scripts/imports_decks.py
 | `export_with_media.py` | Exporte les decks Anki → CSV + images |
 | `imports_decks.py` | Importe les CSV du repo → Anki local |
 | `generate_apkg.py` | Génère des `.apkg` sans Anki (utilisé par la CI) |
+| `generate_index.py` | Crée la page web de téléchargement (utilisé par la CI) |
 
 ---
 
 ## 🔗 Liens Utiles
 
+- [🌐 Page de téléchargement](https://cermp.github.io/anki-ptsi/)
 - [Anki Desktop](https://apps.ankiweb.net/)
 - [AnkiConnect (addon)](https://ankiweb.net/shared/info/2055492159)
 - [Documentation Anki](https://docs.ankiweb.net/)
 
+---
+
+## 🚀 Comment ça marche ?
+
+1. **Tu modifies un CSV** ou tu exportes un deck depuis Anki
+2. **Tu push sur GitHub**
+3. **GitHub Actions** lance automatiquement :
+   - Génération des fichiers `.apkg` individuels
+   - Création de la page web avec les liens de téléchargement
+   - Déploiement sur GitHub Pages
+4. **C'est en ligne** à [cermp.github.io/anki-ptsi](https://cermp.github.io/anki-ptsi/) !
