@@ -131,10 +131,10 @@ def save_html(data):
         .subject-section {{ margin-bottom: 2.5rem; }}
         .subject-title {{
             font-size: 1.5rem;
-            color: #2e3440;
+            color: #e5e9f0;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 3px solid #4c566a;
+            border-bottom: 3px solid #d8dee9;
             font-weight: 600;
         }}
         .deck-list {{ display: flex; flex-direction: column; gap: 0.75rem; }}
@@ -149,8 +149,8 @@ def save_html(data):
             border: 2px solid transparent;
         }}
         .deck-item:hover {{
-            background: #e5e9f0;
-            border-color: #bf616a;
+            background: #81a1c1;
+            border-color: #88c0d0;
             transform: translateX(5px);
         }}
         .deck-info {{ flex: 1; }}
@@ -172,7 +172,7 @@ def save_html(data):
         .empty-state {{
             text-align: center;
             padding: 3rem 2rem;
-            color: #718096;
+            color: #b48ead;
         }}
         footer {{
             background: #4c566a;
@@ -181,7 +181,7 @@ def save_html(data):
             color: #b48ead;
             border-top: 1px solid #d8dee9;
         }}
-        footer a {{ color: #434c5e; text-decoration: none; font-weight: 600; }}
+        footer a {{ color: #88c0d0; text-decoration: none; font-weight: 600; }}
         footer a:hover {{ text-decoration: underline; }}
         @media (max-width: 600px) {{
             h1 {{ font-size: 1.8rem; }}
