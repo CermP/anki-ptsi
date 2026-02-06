@@ -255,7 +255,7 @@ def save_html(data):
         .deck-item:hover {{
             background: var(--nord2);
             border-color: var(--nord7);
-            transform: translateX(6px);
+            transform: scale(1.025);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }}
         
@@ -296,7 +296,7 @@ def save_html(data):
         
         .download-btn:hover {{
             background: var(--nord8);
-            transform: scale(1.05);
+            transform: scale(1.025);
             box-shadow: 0 4px 16px rgba(136, 192, 208, 0.5);
         }}
         
@@ -385,8 +385,8 @@ def save_html(data):
 <body>
     <div class="container">
         <header>
-            <h1>🎯 Decks Anki PTSI</h1>
-            <p class="subtitle">Téléchargez vos flashcards, un clic et c'est dans Anki !</p>
+            <h1>Decks Anki PTSI</h1>
+            <p class="subtitle">Téléchargez les packets, un clic et c'est dans Anki !</p>
             <div class="stats">
                 <div class="stat-item">
                     <span class="stat-number">{total_decks}</span>
@@ -425,7 +425,7 @@ def save_html(data):
                             <div class="deck-size">{deck['size']}</div>
                         </div>
                         <a href="{deck['filename']}" class="download-btn" download>
-                            <span>⬇️</span>
+                            <span>📥</span>
                             <span>Télécharger</span>
                         </a>
                     </div>'''
@@ -438,7 +438,7 @@ def save_html(data):
         </div>
         
         <footer>
-            <p>🚀 Projet open source : <a href="https://github.com/CermP/anki-ptsi" target="_blank" rel="noopener">CermP/anki-ptsi</a></p>
+            <p>Projet open source : <a href="https://github.com/CermP/anki-ptsi" target="_blank" rel="noopener">CermP/anki-ptsi</a></p>
             <p style="margin-top: 0.5rem; opacity: 0.7;">🤝 Contributions bienvenues sur GitHub !</p>
         </footer>
     </div>
