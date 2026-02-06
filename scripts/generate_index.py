@@ -18,20 +18,38 @@ def collect_decks():
     """Parcourt le dossier output et récupère tous les .apkg générés"""
     decks_by_subject = {}
     
-    for filename in sorted(os.listdir(OUTPUT_DIR)):
-        if not filename.endswith('.apkg'):
-            continue
-            
-        # Déduit la matière du nom du fichier
-        # Format attendu : matiere-sujet.apkg ou matiere-sous_matiere-sujet.apkg
-        parts = filename.replace('.apkg', '').split('-')
+    # Vérifier que le dossier existe et contient des fichiers
+    if not os.path.exists(OUTPUT_DIR):
+        print(f"⚠️ Le dossier {OUTPUT_DIR} n'existe pas")
+        return decks_by_subject
+    
+    files = [f for f in os.listdir(OUTPUT_DIR) if f.endswith('.apkg')]
+    print(f"🔍 Trouvé {len(files)} fichiers .apkg dans {OUTPUT_DIR}")
+    
+    for filename in sorted(files):
+        print(f"   - Traitement de {filename}")
         
-        if len(parts) >= 1:
-            subject = parts[0].capitalize()
-            deck_name = filename.replace('.apkg', '').replace('-', ' :: ').replace('_', ' ')
-            
-            # Calcul de la taille du fichier
-            file_path = os.path.join(OUTPUT_DIR, filename)
+        # Déduit la matière et le nom du deck
+        # Format attendu : Matiere-Chapitre.apkg ou matiere-sous_matiere-sujet.apkg
+        base_name = filename.replace('.apkg', '')
+        
+        # Cherche le pattern "Matiere-" au début
+        parts = base_name.split('-', 1)  # Split seulement sur le premier tiret
+        
+        if len(parts) >= 2:
+            subject = parts[0].strip().capitalize()
+            deck_title = parts[1].strip()
+        else:
+            # Si pas de tiret, utilise le nom complet
+            subject = "Autres"
+            deck_title = base_name
+        
+        # Reconstitue un nom lisible
+        deck_name = deck_title.replace('_', ' ')
+        
+        # Calcul de la taille du fichier
+        file_path = os.path.join(OUTPUT_DIR, filename)
+        try:
             file_size = os.path.getsize(file_path)
             
             # Conversion en KB/MB
@@ -49,6 +67,11 @@ def collect_decks():
                 'size': size_str,
                 'size_bytes': file_size
             })
+            print(f"      → Ajouté dans la catégorie '{subject}' : {deck_name}")
+            
+        except Exception as e:
+            print(f"   ⚠️ Erreur lors de la lecture de {filename}: {e}")
+            continue
     
     return decks_by_subject
 
@@ -64,7 +87,11 @@ def generate_json(decks_data):
 def generate_html(decks_data):
     """Génère une page HTML avec les liens de téléchargement"""
     
-    html_content = """
+    # Calcul des statistiques
+    total_decks = sum(len(decks) for decks in decks_data.values()) if decks_data else 0
+    total_subjects = len(decks_data) if decks_data else 0
+    
+    html_content = f"""
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -72,70 +99,70 @@ def generate_html(decks_data):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decks Anki PTSI - Téléchargements</title>
     <style>
-        * {
+        * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
+        }}
         
-        body {
+        body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 2rem;
-        }
+        }}
         
-        .container {
+        .container {{
             max-width: 900px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-        }
+        }}
         
-        header {
+        header {{
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
-        }
+        }}
         
-        h1 {
+        h1 {{
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
             font-weight: 700;
-        }
+        }}
         
-        .subtitle {
+        .subtitle {{
             font-size: 1.1rem;
             opacity: 0.9;
-        }
+        }}
         
-        .content {
+        .content {{
             padding: 2rem;
-        }
+        }}
         
-        .subject-section {
+        .subject-section {{
             margin-bottom: 2.5rem;
-        }
+        }}
         
-        .subject-title {
+        .subject-title {{
             font-size: 1.5rem;
             color: #667eea;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 3px solid #667eea;
             font-weight: 600;
-        }
+        }}
         
-        .deck-list {
+        .deck-list {{
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
-        }
+        }}
         
-        .deck-item {
+        .deck-item {{
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -144,31 +171,31 @@ def generate_html(decks_data):
             border-radius: 10px;
             transition: all 0.2s ease;
             border: 2px solid transparent;
-        }
+        }}
         
-        .deck-item:hover {
+        .deck-item:hover {{
             background: #e9ecef;
             border-color: #667eea;
             transform: translateX(5px);
-        }
+        }}
         
-        .deck-info {
+        .deck-info {{
             flex: 1;
-        }
+        }}
         
-        .deck-name {
+        .deck-name {{
             font-weight: 600;
             color: #2d3748;
             font-size: 1rem;
             margin-bottom: 0.25rem;
-        }
+        }}
         
-        .deck-size {
+        .deck-size {{
             font-size: 0.875rem;
             color: #718096;
-        }
+        }}
         
-        .download-btn {
+        .download-btn {{
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 0.6rem 1.5rem;
@@ -177,74 +204,86 @@ def generate_html(decks_data):
             font-weight: 600;
             transition: all 0.2s ease;
             display: inline-block;
-        }
+        }}
         
-        .download-btn:hover {
+        .download-btn:hover {{
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
+        }}
         
-        footer {
+        .empty-state {{
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #718096;
+        }}
+        
+        .empty-state h2 {{
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }}
+        
+        footer {{
             background: #f8f9fa;
             padding: 2rem;
             text-align: center;
             color: #718096;
             border-top: 1px solid #e2e8f0;
-        }
+        }}
         
-        footer a {
+        footer a {{
             color: #667eea;
             text-decoration: none;
             font-weight: 600;
-        }
+        }}
         
-        footer a:hover {
+        footer a:hover {{
             text-decoration: underline;
-        }
+        }}
         
-        .stats {
+        .stats {{
             display: flex;
             justify-content: center;
             gap: 2rem;
             margin-top: 1rem;
             flex-wrap: wrap;
-        }
+        }}
         
-        .stat-item {
+        .stat-item {{
             text-align: center;
-        }
+        }}
         
-        .stat-number {
+        .stat-number {{
             font-size: 2rem;
             font-weight: 700;
             color: white;
-        }
+        }}
         
-        .stat-label {
+        .stat-label {{
             font-size: 0.9rem;
             opacity: 0.9;
-        }
+        }}
         
-        @media (max-width: 600px) {
-            h1 {
+        @media (max-width: 600px) {{
+            h1 {{
                 font-size: 1.8rem;
-            }
+            }}
             
-            .content {
+            .content {{
                 padding: 1.5rem;
-            }
+            }}
             
-            .deck-item {
+            .deck-item {{
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
-            }
+            }}
             
-            .download-btn {
+            .download-btn {{
                 width: 100%;
                 text-align: center;
-            }
-        }
+            }}
+        }}
     </style>
 </head>
 <body>
@@ -267,17 +306,27 @@ def generate_html(decks_data):
         <div class="content">
 """
     
-    # Génération des sections par matière
-    for subject in sorted(decks_data.keys()):
-        decks = decks_data[subject]
-        html_content += f"""
+    # Si aucun deck, afficher un message
+    if not decks_data or total_decks == 0:
+        html_content += """
+            <div class="empty-state">
+                <h2>📦 Aucun deck disponible pour le moment</h2>
+                <p>Les decks seront générés automatiquement lors du prochain push sur le repository.</p>
+                <p style="margin-top: 1rem;">En attendant, vous pouvez consulter le <a href="https://github.com/CermP/anki-ptsi" style="color: #667eea; font-weight: 600;">code source sur GitHub</a>.</p>
+            </div>
+"""
+    else:
+        # Génération des sections par matière
+        for subject in sorted(decks_data.keys()):
+            decks = decks_data[subject]
+            html_content += f"""
             <div class="subject-section">
                 <h2 class="subject-title">{subject}</h2>
                 <div class="deck-list">
 """
-        
-        for deck in decks:
-            html_content += f"""
+            
+            for deck in decks:
+                html_content += f"""
                     <div class="deck-item">
                         <div class="deck-info">
                             <div class="deck-name">{deck['name']}</div>
@@ -286,20 +335,11 @@ def generate_html(decks_data):
                         <a href="{deck['filename']}" class="download-btn" download>⬇️ Télécharger</a>
                     </div>
 """
-        
-        html_content += """
+            
+            html_content += """
                 </div>
             </div>
 """
-    
-    # Calcul des statistiques
-    total_decks = sum(len(decks) for decks in decks_data.values())
-    total_subjects = len(decks_data)
-    
-    html_content = html_content.format(
-        total_decks=total_decks,
-        total_subjects=total_subjects
-    )
     
     html_content += """
         </div>
@@ -321,11 +361,17 @@ def generate_html(decks_data):
 # --- LANCEMENT ---
 if __name__ == "__main__":
     print("🔨 Génération de l'index des decks...")
+    print(f"📂 Dossier de sortie : {OUTPUT_DIR}")
+    
     decks_data = collect_decks()
+    
+    # Générer les fichiers même s'il n'y a pas de decks
+    generate_json(decks_data)
+    generate_html(decks_data)
     
     if not decks_data:
         print("⚠️ Aucun deck trouvé dans le dossier output/")
+        print("📝 Page HTML générée avec message d'attente")
     else:
-        generate_json(decks_data)
-        generate_html(decks_data)
-        print(f"✨ Index généré avec succès ! {sum(len(d) for d in decks_data.values())} decks disponibles.")
+        total = sum(len(d) for d in decks_data.values())
+        print(f"✨ Index généré avec succès ! {total} decks disponibles dans {len(decks_data)} matières.")
