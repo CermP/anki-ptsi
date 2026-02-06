@@ -1,4 +1,4 @@
-name: Générer les paquets Anki (.apkg)
+name: Générer et déployer les decks Anki
 
 on:
   push:
@@ -7,89 +7,75 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout du repository
-      uses: actions/checkout@v4
-      
-    - name: Configuration de Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        
-    - name: Installation des dépendances
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Génération des fichiers .apkg
-      run: |
-        python scripts/generate_apkg.py
-        
-    - name: Liste des fichiers générés
-      run: |
-        echo "Fichiers dans output/:"
-        ls -lah output/ || echo "Dossier output vide"
-        
-    - name: Création de l'index des decks
-      run: |
-        python scripts/generate_index.py
-        
-    - name: Upload des fichiers .apkg (Artifacts)
-      uses: actions/upload-artifact@v4
-      with:
-        name: anki-decks
-        path: output/*.apkg
-        retention-days: 30
-        if-no-files-found: warn
+# Permissions nécessaires pour GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-  deploy:
-    needs: build
+# Un seul déploiement à la fois
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-      
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
-    - name: Checkout du repository
+    - name: 📥 Checkout du repository
       uses: actions/checkout@v4
       
-    - name: Configuration de Python
+    - name: 🐍 Configuration de Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+        cache: 'pip'
         
-    - name: Installation des dépendances
+    - name: 📦 Installation des dépendances
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
-    - name: Génération des fichiers .apkg
+        
+    - name: 🔨 Génération des fichiers .apkg
       run: |
         python scripts/generate_apkg.py
         
-    - name: Création de l'index HTML
+    - name: 📊 Création de l'index HTML et JSON
       run: |
         python scripts/generate_index.py
         
-    - name: Configuration de GitHub Pages
+    - name: 📝 Liste des fichiers générés
+      run: |
+        echo "=== Contenu du dossier output/ ==="
+        ls -lah output/
+        echo ""
+        echo "=== Fichiers .apkg ==="
+        find output/ -name "*.apkg" -exec basename {} \;
+        
+    - name: 📦 Upload des .apkg (Artifacts de secours)
+      uses: actions/upload-artifact@v4
+      with:
+        name: anki-decks-backup
+        path: output/*.apkg
+        retention-days: 30
+        if-no-files-found: warn
+        
+    - name: ⚙️ Configuration de GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/configure-pages@v4
       
-    - name: Upload des fichiers pour GitHub Pages
+    - name: 📤 Upload vers GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-pages-artifact@v3
       with:
         path: output/
         
-    - name: Déploiement sur GitHub Pages
+    - name: 🚀 Déploiement sur GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: deployment
       uses: actions/deploy-pages@v4
