@@ -85,6 +85,7 @@ def save_html(data):
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="google-site-verification" content="DmmybIY5FSzQJMfHe_74H2ciJW4PxvPLA-KXHtOE3_I" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decks Anki PTSI - CermP</title>
     <style>
