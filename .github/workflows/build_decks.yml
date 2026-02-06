@@ -7,11 +7,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,7 +29,56 @@ jobs:
       run: |
         python scripts/generate_apkg.py
         
+    - name: Liste des fichiers générés
+      run: |
+        echo "Fichiers dans output/:"
+        ls -lah output/ || echo "Dossier output vide"
+        
     - name: Création de l'index des decks
+      run: |
+        python scripts/generate_index.py
+        
+    - name: Upload des fichiers .apkg (Artifacts)
+      uses: actions/upload-artifact@v4
+      with:
+        name: anki-decks
+        path: output/*.apkg
+        retention-days: 30
+        if-no-files-found: warn
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout du repository
+      uses: actions/checkout@v4
+      
+    - name: Configuration de Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Installation des dépendances
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Génération des fichiers .apkg
+      run: |
+        python scripts/generate_apkg.py
+        
+    - name: Création de l'index HTML
       run: |
         python scripts/generate_index.py
         
