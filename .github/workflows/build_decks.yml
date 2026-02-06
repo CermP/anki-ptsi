@@ -5,7 +5,12 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # Permet de lancer manuellement
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -29,9 +34,18 @@ jobs:
       run: |
         python scripts/generate_apkg.py
         
-    - name: Upload des fichiers .apkg
-      uses: actions/upload-artifact@v4
+    - name: Création de l'index des decks
+      run: |
+        python scripts/generate_index.py
+        
+    - name: Configuration de GitHub Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload des fichiers pour GitHub Pages
+      uses: actions/upload-pages-artifact@v3
       with:
-        name: anki-decks
-        path: output/*.apkg
-        retention-days: 30
+        path: output/
+        
+    - name: Déploiement sur GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
