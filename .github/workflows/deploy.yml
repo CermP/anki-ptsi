@@ -13,10 +13,6 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: false
-  
-plugins:
-  - jekyll-sitemap
-
 
 jobs:
   build-and-deploy:
