@@ -1,9 +1,11 @@
+
 import json
 import urllib.request
 import os
 import csv
 import html
 import re
+import sys # Added to read command-line arguments
 
 # --- CONFIGURATION AUTOMATIQUE DES CHEMINS ---
 # On trouve le chemin du script actuel (scripts/imports_decks.py)
@@ -24,11 +26,12 @@ ANKI_URL = "http://localhost:8765"
 def request(action, **params):
     """Communique avec Anki via AnkiConnect."""
     try:
-        response = json.load(urllib.request.urlopen(urllib.request.Request(ANKI_URL, json.dumps({
+        req = urllib.request.Request(ANKI_URL, json.dumps({
             "action": action,
             "params": params,
             "version": 6
-        }).encode("utf-8"))))
+        }).encode("utf-8"))
+        response = json.load(urllib.request.urlopen(req))
         if response.get("error") is not None:
             raise Exception(response["error"])
         return response
@@ -43,8 +46,7 @@ def get_model_name():
     if response and response.get("result"):
         models = response.get("result", [])
         if models:
-            # On prend le 2ème modèle s'il existe (souvent "Basic"), sinon le 1er
-            chosen = models[1] if len(models) > 1 else models[0]
+            chosen = models[1] if len(models) > 1 and "Basic" in models else models[0]
             print(f"  📋 Utilisation du modèle : {chosen}")
             return chosen
     print("  ❌ Aucun modèle trouvé dans Anki")
@@ -63,11 +65,9 @@ def get_model_field_names(model_name):
 
 def add_media_to_anki(filename, target_dir):
     """Ajoute un fichier média à Anki via AnkiConnect."""
-    # On cherche dans le sous-dossier spécifique (ex: media/maths/)
     filepath = os.path.join(MEDIA_DIR, target_dir, filename)
     
     if not os.path.exists(filepath):
-        # Si pas trouvé, on cherche aussi à la racine de media/ au cas où
         filepath_root = os.path.join(MEDIA_DIR, filename)
         if os.path.exists(filepath_root):
             filepath = filepath_root
@@ -80,69 +80,56 @@ def add_media_to_anki(filename, target_dir):
         import base64
         encoded = base64.b64encode(data).decode('utf-8')
         response = request("storeMediaFile", filename=filename, data=encoded)
-        if response and response.get("result"):
-            return filename
-        return None
+        return response is not None
     except Exception:
         return None
 
 def process_media_paths(text, target_dir):
     """Transforme les chemins relatifs en chemins Anki (<img src="image.jpg">)."""
     text = text.replace('""', '"')
-    # Regex pour trouver src="../media/..." et garder juste le nom du fichier
     pattern = r'<img[^>]+src="(?:\.\./)*media\/[^/]+\/([^"]+)"([^>]*)>'
     replacement = r'<img src="\1"\2>'
-    processed = re.sub(pattern, replacement, text)
-    return processed
+    return re.sub(pattern, replacement, text)
 
 def add_images_from_text(text, target_dir):
     """Cherche toutes les images dans le texte et les ajoute à Anki."""
     pattern = r'src="([^"]+)"'
     matches = re.findall(pattern, text)
     for filename in matches:
-        if filename.startswith('http') or filename.startswith('..'):
-            continue
-        add_media_to_anki(filename, target_dir)
+        if not filename.startswith('http'):
+            add_media_to_anki(filename, target_dir)
 
 def process_csv_for_anki(csv_path, deck_name, target_dir, model_name, field_names):
     cards = []
     try:
         with open(csv_path, 'r', encoding='utf-8-sig') as f:
-            reader = csv.reader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-            for row_idx, row in enumerate(reader, 1):
-                if not row or all(cell.strip() == '' for cell in row) or len(row) < 2:
+            reader = csv.reader(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for row in reader:
+                if not row or len(row) < 2:
                     continue
                 
                 front = row[0].strip()
                 back = row[1].strip()
                 tags = row[2].strip() if len(row) > 2 else ""
 
-                if front.startswith('"') and front.endswith('"'): front = front[1:-1]
-                if back.startswith('"') and back.endswith('"'): back = back[1:-1]
-                front = front.replace('""', '"')
-                back = back.replace('""', '"')
-
                 front = process_media_paths(front, target_dir)
                 back = process_media_paths(back, target_dir)
 
-                add_images_from_text(back, target_dir)
                 add_images_from_text(front, target_dir)
+                add_images_from_text(back, target_dir)
 
-                if not front.strip() and not back.strip():
+                if not front and not back:
                     continue
 
                 cards.append({
                     "deckName": deck_name,
                     "modelName": model_name,
-                    "fields": {
-                        field_names[0]: front,
-                        field_names[1]: back
-                    },
-                    "tags": tags.split() if tags else [],
+                    "fields": { field_names[0]: front, field_names[1]: back },
+                    "tags": tags.split(),
                     "options": {"allowDuplicate": False, "duplicateScope": "deck"}
                 })
     except Exception as e:
-        print(f"    ❌ Erreur CSV : {e}")
+        print(f"    ❌ Erreur lors de la lecture du CSV ({csv_path}): {e}")
         return []
     return cards
 
@@ -158,9 +145,7 @@ def add_notes_to_anki(cards):
     if not cards: return 0
     response = request("addNotes", notes=cards)
     if response:
-        results = response.get("result", [])
-        successful = len([r for r in results if r is not None])
-        return successful
+        return len([r for r in response.get("result", []) if r is not None])
     return 0
 
 def find_all_csvs(root_dir):
@@ -168,38 +153,46 @@ def find_all_csvs(root_dir):
     csv_files = []
     if not os.path.exists(root_dir):
         return []
-    for dirpath, dirnames, filenames in os.walk(root_dir):
+    for dirpath, _, filenames in os.walk(root_dir):
         for filename in filenames:
             if filename.endswith('.csv'):
-                # On garde le chemin relatif par rapport à DECKS_DIR
                 rel_path = os.path.relpath(os.path.join(dirpath, filename), root_dir)
                 csv_files.append(rel_path)
     return sorted(csv_files)
-
-def get_media_folder_for_csv(csv_filename):
-    # On nettoie le nom pour deviner le dossier média
-    clean_name = os.path.basename(csv_filename).replace('.csv', '')
-    # Logique simple : essayer de trouver un dossier qui correspond
-    parts = clean_name.replace('-', ' ').replace('_', ' ').split()
-    # On retourne le dossier complet relatif si besoin, ou juste un nom slugifié
-    # Pour l'instant on garde une logique simple basée sur le nom
-    return clean_name.lower().replace(" ", "_")
-
-def main():
-    test = request("deckNames")
-    if not test:
-        print("\n❌ AnkiConnect n'est pas accessible. Assurez-vous qu'Anki est ouvert.")
-        return
-
-    model_name = get_model_name()
-    if not model_name: return
     
-    field_names = get_model_field_names(model_name)
-    if not field_names or len(field_names) < 2: 
-        print("❌ Le modèle doit avoir au moins 2 champs (ex: Recto, Verso)")
+def get_media_folder_for_csv(csv_filename):
+    """Devine le nom du dossier média à partir du nom du fichier CSV."""
+    clean_name = os.path.basename(csv_filename).replace('.csv', '')
+    return clean_name.lower().replace(" ", "_").replace("-", "_")
+
+def import_single_file(csv_path, model_name, field_names):
+    """Importe un seul fichier CSV spécifié."""
+    print(f"\n--- Import d'un fichier unique ---")
+    csv_filename = os.path.basename(csv_path)
+    
+    # Déduire le nom du deck à partir du nom du fichier
+    deck_name = csv_filename.replace('.csv', '').replace('-', '::').replace('_', ' ')
+    target_dir = get_media_folder_for_csv(csv_filename)
+
+    print(f"📥 Import de '{csv_filename}' vers le deck '{deck_name}'...")
+    
+    if not create_deck_if_needed(deck_name):
+        print("   ❌ Impossible de créer le deck. Annulation.")
         return
 
-    # Utilisation de find_all_csvs pour chercher dans les sous-dossiers
+    cards = process_csv_for_anki(csv_path, deck_name, target_dir, model_name, field_names)
+    
+    if cards:
+        num_added = add_notes_to_anki(cards)
+        print(f"   ✅ {num_added} cartes importées avec succès.")
+    else:
+        print(f"   ⚠️  Aucune carte trouvée ou une erreur est survenue.")
+    
+    print("\n--- Terminé ! ---")
+
+
+def interactive_import(model_name, field_names):
+    """Lance le mode interactif pour choisir les fichiers à importer."""
     csv_files = find_all_csvs(DECKS_DIR)
     
     if not csv_files:
@@ -213,14 +206,12 @@ def main():
     user_input = input("\nEntrez les numéros à importer (séparés par une virgule, ou 'all') : ")
 
     target_files = []
-    if user_input.lower().strip() == 'all' or user_input.strip() == '':
+    if user_input.lower().strip() in ['all', '']:
         target_files = csv_files
     else:
         try:
             indices = [int(x.strip()) for x in user_input.split(",")]
-            for i in indices:
-                if 0 <= i < len(csv_files):
-                    target_files.append(csv_files[i])
+            target_files = [csv_files[i] for i in indices if 0 <= i < len(csv_files)]
         except ValueError:
             print("[ERREUR] Saisie invalide.")
             return
@@ -230,24 +221,32 @@ def main():
 
     for csv_rel_path in target_files:
         csv_path = os.path.join(DECKS_DIR, csv_rel_path)
-        csv_filename = os.path.basename(csv_rel_path)
-        
-        # Reconstruction du nom du deck
-        deck_name = csv_filename.replace('.csv', '').replace('-', '::').replace('_', ' ')
-        target_dir = get_media_folder_for_csv(csv_filename)
+        import_single_file(csv_path, model_name, field_names)
 
-        print(f"📥 Import de '{csv_filename}'...")
-        if not create_deck_if_needed(deck_name): continue
+def main():
+    if not request("deckNames"):
+        print("\n❌ AnkiConnect n'est pas accessible. Assurez-vous qu'Anki est ouvert.")
+        return
 
-        cards = process_csv_for_anki(csv_path, deck_name, target_dir, model_name, field_names)
-        if cards:
-            total_added += add_notes_to_anki(cards)
-            print()
+    model_name = get_model_name()
+    if not model_name: return
+    
+    field_names = get_model_field_names(model_name)
+    if not field_names or len(field_names) < 2: 
+        print("❌ Le modèle doit avoir au moins 2 champs (ex: Recto, Verso)")
+        return
+
+    # Vérifie si un chemin de fichier est passé en argument
+    if len(sys.argv) > 1:
+        # Mode 1: Le chemin du fichier est fourni directement (par l'application macOS)
+        file_path = sys.argv[1]
+        if os.path.exists(file_path):
+            import_single_file(file_path, model_name, field_names)
         else:
-            print(f"   ⚠️  Aucune carte trouvée\n")
-
-    print(f"--- Terminé ! {total_added} cartes importées au total ---")
+            print(f"❌ Erreur : Le fichier '{file_path}' n'a pas été trouvé.")
+    else:
+        # Mode 2: Aucun argument, on lance le mode interactif (comportement original)
+        interactive_import(model_name, field_names)
 
 if __name__ == "__main__":
     main()
-10
