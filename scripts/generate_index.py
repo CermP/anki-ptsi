@@ -3,6 +3,7 @@
 
 import os
 import json
+from datetime import date
 
 # --- CONFIGURATION ---
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -73,9 +74,44 @@ def save_json(data):
     try:
         with open(path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"\n✅ JSON créé : decks.json")
+        print(f"\\n✅ JSON créé : decks.json")
     except Exception as e:
-        print(f"\n❌ Erreur JSON : {e}")
+        print(f"\\n❌ Erreur JSON : {e}")
+
+def save_sitemap(data):
+    """Génère le fichier sitemap.xml pour le référencement"""
+    today = date.today().isoformat()
+    base_url = "https://cermp.github.io/anki-ptsi/"
+    
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    # Page d'accueil
+    xml += '  <url>\n'
+    xml += f'    <loc>{base_url}</loc>\n'
+    xml += f'    <lastmod>{today}</lastmod>\n'
+    xml += '    <changefreq>daily</changefreq>\n'
+    xml += '  </url>\n'
+    
+    # Ajouter chaque deck (fichier .apkg)
+    if data:
+        for subject, deck_list in data.items():
+            for deck in deck_list:
+                filename = deck['filename']
+                xml += '  <url>\n'
+                xml += f'    <loc>{base_url}{filename}</loc>\n'
+                xml += f'    <lastmod>{today}</lastmod>\n'
+                xml += '  </url>\n'
+                
+    xml += '</urlset>'
+    
+    path = os.path.join(OUTPUT_DIR, 'sitemap.xml')
+    try:
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(xml)
+        print(f"✅ Sitemap créé : sitemap.xml")
+    except Exception as e:
+        print(f"❌ Erreur Sitemap : {e}")
 
 def save_html(data):
     total_decks = sum(len(d) for d in data.values()) if data else 0
@@ -458,8 +494,9 @@ if __name__ == "__main__":
     decks = collect_decks()
     save_json(decks)
     save_html(decks)
+    save_sitemap(decks)
     
-    print("\n" + "="*60)
+    print("\\n" + "="*60)
     if decks:
         total = sum(len(d) for d in decks.values())
         print(f"✨ SUCCÈS : {total} deck(s) dans {len(decks)} matières")
