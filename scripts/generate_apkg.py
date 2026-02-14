@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(SCRIPT_DIR)
 
 DECKS_DIR = os.path.join(BASE_DIR, "decks")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
-OUTPUT_DIR = os.path.join(BASE_DIR, "output")
+OUTPUT_DIR = os.path.join(BASE_DIR, "docs")
 
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)

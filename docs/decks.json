@@ -1,0 +1,94 @@
+{
+  "Anglais": [
+    {
+      "name": "vocabulary list",
+      "filename": "Anglais-vocabulary_list.apkg",
+      "size": "76.2 KB",
+      "date": "14/02/2026"
+    }
+  ],
+  "Chimie": [
+    {
+      "name": "Acides et Bases à connaitre",
+      "filename": "Chimie-Acides_et_Bases_à_connaitre.apkg",
+      "size": "52.2 KB",
+      "date": "14/02/2026"
+    }
+  ],
+  "Maths": [
+    {
+      "name": "Chapitre 13 - Systèmes linéaires et matrices",
+      "filename": "Maths-Chapitre 13 - Systèmes linéaires et matrices.apkg",
+      "size": "72.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Chapitre 1.A. - Analyse Généralités",
+      "filename": "Maths-Chapitre_1.A._-_Analyse_Généralités.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Chapitre 1.B. - Premières fonctions usuelles",
+      "filename": "Maths-Chapitre_1.B._-_Premières_fonctions_usuelles.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Chapitre 11 Limites et continuité",
+      "filename": "Maths-Chapitre_11_Limites_et_continuité.apkg",
+      "size": "72.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Chapitre 2 - Logique, raisonnements, calculs algébriques",
+      "filename": "Maths-Chapitre_2_-_Logique,_raisonnements,_calculs_algébriques.apkg",
+      "size": "52.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Chapitre 3 - Nouvelles fonctions usuelles",
+      "filename": "Maths-Chapitre_3_-_Nouvelles_fonctions_usuelles.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Développements limités usuels en 0",
+      "filename": "Maths-Développements_limités_usuels_en_0.apkg",
+      "size": "52.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "Plans de cours",
+      "filename": "Maths-Plans_de_cours.apkg",
+      "size": "68.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "chapitre 12 derivation",
+      "filename": "Maths-chapitre_12_derivation.apkg",
+      "size": "64.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "chapitre 4 complexes",
+      "filename": "Maths-chapitre_4_complexes.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    }
+  ],
+  "Si": [
+    {
+      "name": "Cycle5-Valeurs et caractéristiques à connaitre",
+      "filename": "SI-Cycle5-Valeurs_et_caractéristiques_à_connaitre.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    },
+    {
+      "name": "cycle6 torseur cinematique liaisons",
+      "filename": "SI-cycle6_torseur_cinematique_liaisons.apkg",
+      "size": "60.2 KB",
+      "date": "14/02/2026"
+    }
+  ]
+}
