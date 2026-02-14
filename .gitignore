@@ -8,3 +8,5 @@ venv/
 # Fichiers .apkg générés localement (non versionnés)
 output/
 *.apkg
+# Mais on garde ceux dans docs/ pour GitHub Pages
+!docs/*.apkg
