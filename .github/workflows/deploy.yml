@@ -49,6 +49,20 @@ jobs:
       - name: Generate index
         run: python scripts/generate_index.py
       
+      - name: Verify generated files
+        run: |
+          echo "=== Files in docs/ ==="
+          ls -lh docs/
+          echo "=== .apkg files ==="
+          find docs -name '*.apkg' | wc -l
+      
+      - name: Ensure .apkg files are not gitignored
+        run: |
+          # Remove *.apkg from .gitignore so upload-pages-artifact includes them
+          sed -i '/\*\.apkg/d' .gitignore
+          echo "=== .gitignore after cleanup ==="
+          cat .gitignore
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
