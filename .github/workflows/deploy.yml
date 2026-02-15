@@ -34,22 +34,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Debug - Write repo structure to file
-        run: |
-          {
-            echo "=== pwd ==="
-            pwd
-            echo ""
-            echo "=== Full repo tree ==="
-            find . -not -path './.git/*' -type f | sort
-            echo ""
-            echo "=== decks/ contents ==="
-            find decks -type f 2>&1 || echo "ERROR: decks/ not found"
-            echo ""
-            echo "=== .gitignore ==="
-            cat .gitignore
-          } > docs/debug.txt 2>&1
-      
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -60,28 +44,23 @@ jobs:
         run: pip install -r requirements.txt
       
       - name: Generate .apkg files
-        run: python scripts/generate_apkg.py 2>&1 | tee -a docs/debug.txt
+        run: python scripts/generate_apkg.py
       
       - name: Generate index
-        run: python scripts/generate_index.py 2>&1 | tee -a docs/debug.txt
+        run: python scripts/generate_index.py
       
-      - name: Verify and log
+      - name: Prepare deploy directory
         run: |
-          {
-            echo ""
-            echo "=== Files in docs/ after generation ==="
-            ls -la docs/
-            echo ""
-            echo "=== .apkg files ==="
-            find docs -name '*.apkg' -ls
-            echo ""
-            echo "=== docs/ size ==="
-            du -sh docs/
-          } >> docs/debug.txt 2>&1
-          cat docs/debug.txt
-      
-      - name: Remove .apkg from gitignore for upload
-        run: sed -i '/\*\.apkg/d' .gitignore
+          # Copy everything from docs/ to _site/ (a clean dir outside .gitignore)
+          # This avoids upload-pages-artifact skipping .gitignored files
+          mkdir -p _site
+          cp -r docs/* _site/
+          echo "=== _site/ contents ==="
+          find _site -type f | head -30
+          echo "=== .apkg count ==="
+          find _site -name '*.apkg' | wc -l
+          echo "=== Total size ==="
+          du -sh _site/
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -89,7 +68,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'
+          path: '_site'
       
       - name: Deploy to GitHub Pages
         id: deployment
