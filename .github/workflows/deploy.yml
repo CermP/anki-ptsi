@@ -34,16 +34,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Debug - List repo structure
+      - name: Debug - Write repo structure to file
         run: |
-          echo "=== pwd ==="
-          pwd
-          echo "=== decks/ contents ==="
-          find decks -type f | head -30
-          echo "=== docs/ contents ==="
-          find docs -type f | head -30
-          echo "=== .gitignore ==="
-          cat .gitignore
+          {
+            echo "=== pwd ==="
+            pwd
+            echo ""
+            echo "=== Full repo tree ==="
+            find . -not -path './.git/*' -type f | sort
+            echo ""
+            echo "=== decks/ contents ==="
+            find decks -type f 2>&1 || echo "ERROR: decks/ not found"
+            echo ""
+            echo "=== .gitignore ==="
+            cat .gitignore
+          } > docs/debug.txt 2>&1
       
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -55,21 +60,25 @@ jobs:
         run: pip install -r requirements.txt
       
       - name: Generate .apkg files
-        run: python scripts/generate_apkg.py
+        run: python scripts/generate_apkg.py 2>&1 | tee -a docs/debug.txt
       
       - name: Generate index
-        run: python scripts/generate_index.py
+        run: python scripts/generate_index.py 2>&1 | tee -a docs/debug.txt
       
-      - name: Debug - Verify generated files
+      - name: Verify and log
         run: |
-          echo "=== All files in docs/ ==="
-          find docs -type f -ls
-          echo "=== .apkg count ==="
-          find docs -name '*.apkg' | wc -l
-          echo "=== .apkg files ==="
-          find docs -name '*.apkg'
-          echo "=== docs/ total size ==="
-          du -sh docs/
+          {
+            echo ""
+            echo "=== Files in docs/ after generation ==="
+            ls -la docs/
+            echo ""
+            echo "=== .apkg files ==="
+            find docs -name '*.apkg' -ls
+            echo ""
+            echo "=== docs/ size ==="
+            du -sh docs/
+          } >> docs/debug.txt 2>&1
+          cat docs/debug.txt
       
       - name: Remove .apkg from gitignore for upload
         run: sed -i '/\*\.apkg/d' .gitignore
