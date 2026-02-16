@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="DmmybIY5FSzQJMfHe_74H2ciJW4PxvPLA-KXHtOE3_I" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anki PTSI — Téléchargement des Decks</title>
+    <meta name="description"
+        content="Téléchargez les decks Anki pour la PTSI : Maths, Physique, SI, et plus. Projet collaboratif par et pour les étudiants.">
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/GlassSurface.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <!-- Glass Navbar -->
+    <nav class="glass-navbar">
+        <a href="index.html" class="glass-brand">
+            Anki PTSI
+        </a>
+        <div class="glass-nav-links">
+            <a href="index.html" class="glass-nav-link">Accueil</a>
+            <a href="decks.html" class="glass-nav-link active">Decks</a>
+            <a href="https://github.com/CermP/anki-ptsi" target="_blank" rel="noopener"
+                class="glass-nav-link">GitHub</a>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container hero-content">
+            <h1 class="hero-title">Anki PTSI</h1>
+            <p class="hero-subtitle">Mémorisez efficacement le cours avec les flashcards Anki. <br>Maths, Physique, SI,
+                Anglais... !</p>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Rechercher un chapitre, une matière... ( / )">
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-badge">
+                    <strong>0</strong> Decks
+                </div>
+                <div class="stat-badge">
+                    <strong>0</strong> Matières
+                </div>
+                <div class="stat-badge">
+                    <strong>Collaboratif</strong> & Open Source
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="empty-state">
+            <h2>📦 Aucun deck disponible</h2>
+            <p>Les decks seront générés automatiquement. Revenez plus tard !</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Projet open source maintenu par <a href="https://github.com/CermP/anki-ptsi" target="_blank"
+                    rel="noopener">CermP</a></p>
+            <p style="margin-top: 0.5rem; opacity: 0.6;">Contribuez sur GitHub pour ajouter vos propres decks !</p>
+        </div>
+    </footer>
+
+    <!-- Stats & Scripts -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
