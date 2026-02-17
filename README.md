@@ -1,76 +1,78 @@
-# Flashcards PTSI Collaboratives
+# 📚 Flashcards PTSI Collaboratives
 
-[Qu'est-ce que Anki ?](https://www.ac-paris.fr/anki-l-application-pour-memoriser-et-reviser-128726) · [Site officiel](https://apps.ankiweb.net)
+> **Un projet communautaire pour partager et améliorer ses méthodes de révision en PTSI.**
 
-## Télécharger les Decks
+[Qu'est-ce que Anki ?](https://www.ac-paris.fr/anki-l-application-pour-memoriser-et-reviser-128726) · [Site officiel](https://apps.ankiweb.net) · [Documentation](https://docs.ankiweb.net/)
 
-### 👉 **[Page de téléchargement avec decks individuels](https://cermp.github.io/anki-ptsi/)**
+## 📥 Télécharger les Decks
+
+👉 **[Accéder à la bibliothèque de decks (Maths, Physique, SI...)](https://cermp.github.io/anki-ptsi/)**
 
 ---
 
-## ➕ Comment Contribuer
+## 🤝 Comment Contribuer
 
 ### Prérequis
 
-- **Anki** (desktop) installé avec **[AnkiConnect](https://ankiweb.net/shared/info/2055492159)** (add-on n°`2055492159`)
-- **[AnkiCompanionApp](https://github.com/CermP/AnkiCompanionApp/releases/latest)** (macOS) — pour exporter les decks
-- Un [compte GitHub](https://github.com/signup)
+1.  **[Anki Desktop](https://apps.ankiweb.net/)** installé.
+2.  **[AnkiConnect](https://ankiweb.net/shared/info/2055492159)** (Add-on n°`2055492159`) configuré.
+3.  **[AnkiCompanionApp](https://github.com/CermP/AnkiCompanionApp/releases/latest)** (macOS) pour exporter facilement.
+4.  Un compte **GitHub**.
 
-### Petites corrections (directement sur GitHub)
+### Façon simple : Modifier sur GitHub
 
-1. Va dans le fichier CSV concerné (ex: `decks/maths/suites.csv`)
-2. Clique sur le crayon ✏️ pour éditer
-3. Modifie les cartes, commit tes changements
+Pour corriger une coquille ou une erreur :
+1.  Va dans le dossier `decks/` et trouve le fichier CSV concerné.
+2.  Clique sur le crayon ✏️ pour éditer.
+3.  Fais tes modifications et commit (« Propose changes »).
 
-### Modifier ou ajouter des decks via Anki
+### Façon complète : Ajouter des decks via Anki
 
-```bash
-# 1. Clone le repo
-git clone https://github.com/CermP/anki-ptsi.git
-cd anki-ptsi
-```
-
-1. Crée ou modifie tes cartes dans **Anki**
-2. Ouvre **[AnkiCompanionApp](https://github.com/CermP/AnkiCompanionApp/releases/latest)** → **"Export Decks & Media..."**
-3. Sélectionne tes decks, choisis le dossier `anki-ptsi/` comme destination
-4. Commit & push les CSV + images modifiés
-5. Ouvre une **Pull Request** 🎉
-
-> **Note macOS** : au premier lancement d'AnkiCompanionApp, faites clic droit → Ouvrir → "Ouvrir quand même"
+1.  Clone le dépôt :
+    ```bash
+    git clone https://github.com/CermP/anki-ptsi.git
+    cd anki-ptsi
+    ```
+2.  Crée tes decks dans Anki.
+3.  Utilise **AnkiCompanionApp** (ou lance `python3 scripts/export_with_media.py`) pour exporter vers le dossier du dépôt.
+4.  Fais une Pull Request avec tes changements !
 
 ---
 
-## 📁 Structure du Repo
+## 🛠️ Structure du Projet
 
+```mermaid
+graph TD;
+    A[anki-ptsi] --> B[decks/];
+    A --> C[media/];
+    A --> D[scripts/];
+    A --> E[docs/];
+    B -- CSV --> F[Maths];
+    B -- CSV --> G[Physique];
+    C -- Images --> H[assets];
+    D -- Python --> I[Outils];
+    E -- HTML --> J[Site Web];
 ```
-anki-ptsi/
-├── decks/           # Fichiers CSV (versionnés avec Git)
-│   ├── maths/
-│   └── physique/
-├── media/           # Images liées aux cartes
-│   ├── suites/
-│   └── mecanique/
-└── scripts/         # Scripts d'automatisation
-```
 
-## Scripts Disponibles
+## 📜 Scripts Disponibles
 
-| Script | Description |
-|--------|-------------|
-| `export_with_media.py` | Exporte les decks Anki → CSV + images |
-| `imports_decks.py` | Importe les CSV du repo → Anki local |
-| `generate_apkg.py` | Génère des `.apkg` sans Anki (effectué à chaque push) |
-| `generate_index.py` | Crée la page web de téléchargement (effectué à chaque push) |
+Les scripts se trouvent dans le dossier `scripts/`.
 
-> 💡 Les scripts d'export/import sont intégrés dans **[AnkiCompanionApp](https://github.com/CermP/AnkiCompanionApp/releases/latest)**, pas besoin de les lancer manuellement.
+| Script | Description | Commande |
+| :--- | :--- | :--- |
+| `export_with_media.py` | Exporte les decks Anki vers CSV + Images | `python3 scripts/export_with_media.py` |
+| `imports_decks.py` | Importe tous les CSV du dépôt dans Anki | `python3 scripts/imports_decks.py` |
+| `generate_apkg.py` | Génère les fichiers `.apkg` pour le site | `python3 scripts/generate_apkg.py` |
+| `generate_index.py` | Met à jour l'index du site web | `python3 scripts/generate_index.py` |
+
+> 💡 **Note :** Les dépendances Python requises sont `genanki`. Installez-les avec `pip install genanki`.
 
 ---
 
-## Liens Utiles
+## 🔗 Liens Utiles
 
-- [🌐 Page de téléchargement](https://cermp.github.io/anki-ptsi/)
+- [🌐 Page de Decks](https://cermp.github.io/anki-ptsi/)
 - [📱 AnkiCompanionApp](https://github.com/CermP/AnkiCompanionApp/releases/latest)
-- [Anki Desktop](https://apps.ankiweb.net/)
-- [AnkiConnect (add-on)](https://ankiweb.net/shared/info/2055492159)
-- [Comment cloner le projet](https://docs.github.com/fr/repositories/creating-and-managing-repositories/cloning-a-repository)
-- [Documentation Anki](https://docs.ankiweb.net/)
+- [🐛 Signaler un problème](https://github.com/CermP/anki-ptsi/issues)
+
+**Merci à tous les contributeurs !** ❤️

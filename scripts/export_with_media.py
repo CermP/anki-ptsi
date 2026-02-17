@@ -1,102 +1,140 @@
-import json
-import urllib.request
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import csv
 import os
 import shutil
 import html
-from pathlib import Path
 import re
-import unicodedata
+from utils import slugify, anki_connect_request
 
 # --- CONFIGURATION ---
-# On récupère le dossier où se trouve le script actuel (scripts/)
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# On définit la racine du projet (un dossier au dessus de scripts/)
+SCRIPT_PATH = os.path.realpath(__file__)
+SCRIPT_DIR = os.path.dirname(SCRIPT_PATH)
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
 
-# On définit les dossiers par rapport à la racine du projet
 OUTPUT_DIR = os.path.join(BASE_DIR, "decks")
-MEDIA_DIR = os.path.join(BASE_DIR, "media")
+MEDIA_REPO_DIR = os.path.join(BASE_DIR, "media")
 
-ANKI_URL = "http://localhost:8765"
-ANKI_DB = os.path.expanduser("~/Library/Application Support/Anki2/Utilisateur 1/collection.anki2")
-ANKI_MEDIA_PATH = os.path.expanduser("~/Library/Application Support/Anki2/Utilisateur 1/collection.media")
+# Paths specific to the user's Anki installation
+ANKI_USER_PROFILE = "Utilisateur 1"
+ANKI_MEDIA_PATH = os.path.expanduser(f"~/Library/Application Support/Anki2/{ANKI_USER_PROFILE}/collection.media")
 
-def request(action, **params):
-    try:
-        response = json.load(urllib.request.urlopen(urllib.request.Request(ANKI_URL, json.dumps({
-            "action": action,
-            "params": params,
-            "version": 6
-        }).encode("utf-8"))))
-        if response.get("error") is not None:
-            raise Exception(response["error"])
-        return response
-    except Exception as e:
-        print(f"\n[ERREUR] Impossible de connecter à Anki : {e}")
-        return None
-
-def slugify(value):
-    """Supprime les accents et caractères spéciaux"""
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-    value = re.sub(r'[^\w\s-]', '', value).strip().lower()
-    return re.sub(r'[-\s]+', '_', value)
-
-def copy_media_files(source_text, deck_name, media_subfolder):
+def copy_media_files(source_text, media_subfolder):
     """
     Cherche les références aux médias dans le texte.
     Les copie du dossier Anki vers le repo.
-    Retourne le texte modifié avec les nouveaux chemins.
+    Retourne le texte modifié avec les nouveaux chemins relatifs.
     """
-    # Créer le dossier s'il n'existe pas
-    target_dir = os.path.join(MEDIA_DIR, media_subfolder)
-    os.makedirs(target_dir, exist_ok=True)
+    target_dir = os.path.join(MEDIA_REPO_DIR, media_subfolder)
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
     
     modified_text = source_text
     
     # Regex pour trouver les images (src="nomfichier.ext")
-    # Anki exporte généralement des fichiers sans espaces avec des numéros
     image_pattern = r'src=["\']([^"\']+\.(jpg|jpeg|png|gif|svg))["\']'
-    
     matches = re.findall(image_pattern, source_text, re.IGNORECASE)
     
     for match in matches:
-        old_filename = match[0]
-        old_path = os.path.join(ANKI_MEDIA_PATH, old_filename)
+        filename = match[0]
+        anki_file_path = os.path.join(ANKI_MEDIA_PATH, filename)
         
-        # Copier le fichier depuis la base Anki vers le repo
-        if os.path.exists(old_path):
-            # Utiliser un nom de fichier "lisible" si possible
-            # Sinon garder le nom original
-            new_filename = old_filename
-            new_path = os.path.join(target_dir, new_filename)
-            
+        if os.path.exists(anki_file_path):
+            # Copier le fichier
+            repo_file_path = os.path.join(target_dir, filename)
             try:
-                shutil.copy2(old_path, new_path)
-                print(f"  📸 Copié : {new_filename}")
+                shutil.copy2(anki_file_path, repo_file_path)
+                print(f"  📸 Copié : {filename}")
                 
-                # Remplacer le chemin dans le texte
-                new_relative_path = f"../media/{media_subfolder}/{new_filename}"
-                modified_text = modified_text.replace(
-                    f'src="{old_filename}"',
-                    f'src="{new_relative_path}"'
-                )
-                modified_text = modified_text.replace(
-                    f"src='{old_filename}'",
-                    f"src='{new_relative_path}'"
-                )
+                # Update path in text to be relative for the repo
+                # ../media/subfolder/image.jpg
+                new_relative_path = f"../media/{media_subfolder}/{filename}"
+                
+                # Replace with both quote types to be safe
+                modified_text = modified_text.replace(f'src="{filename}"', f'src="{new_relative_path}"')
+                modified_text = modified_text.replace(f"src='{filename}'", f"src='{new_relative_path}'")
+                
             except Exception as e:
-                print(f"  ⚠️  Erreur lors de la copie de {old_filename}: {e}")
+                print(f"  ⚠️  Erreur copie {filename}: {e}")
         else:
-            print(f"  ⚠️  Fichier média introuvable: {old_filename}")
-    
+            print(f"  ⚠️  Média introuvable : {filename}")
+            
     return modified_text
 
-def main():
-    # Récupérer la liste des decks
-    response = request("deckNames")
-    if not response: return
+def export_deck(deck_name):
+    """Exporte un deck spécifique en CSV + média."""
+    print(f"📦 Export de '{deck_name}'...")
     
+    # 1. Determine media subfolder
+    # Ex: "PTSI::Maths" -> "maths"
+    # Ex: "Vocabulaire" -> "vocabulaire"
+    parts = deck_name.split("::")
+    media_subfolder = slugify(parts[-1])
+    
+    # 2. Determine file path
+    if len(parts) == 1:
+        subject = "divers"
+        safe_filename = slugify(parts[0])
+    else:
+        subject = slugify(parts[0])
+        safe_filename = "_".join([slugify(p) for p in parts[1:]])
+        
+    subject_dir = os.path.join(OUTPUT_DIR, subject)
+    if not os.path.exists(subject_dir):
+        os.makedirs(subject_dir)
+        
+    csv_filename = os.path.join(subject_dir, f"{safe_filename}.csv")
+    
+    # 3. Fetch notes from Anki
+    find_notes = anki_connect_request("findNotes", query=f'"deck:{deck_name}"')
+    if not find_notes:
+        return
+        
+    notes_info = anki_connect_request("notesInfo", notes=find_notes["result"])
+    if not notes_info:
+        return
+
+    # 4. Write to CSV
+    try:
+        with open(csv_filename, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.writer(f, delimiter=";")
+            count = 0
+            
+            for note in notes_info["result"]:
+                fields_values = []
+                
+                # Process fields
+                for f_obj in note["fields"].values():
+                    raw_value = f_obj["value"]
+                    clean_value = html.unescape(raw_value)
+                    
+                    # Copy media and update paths
+                    minified_value = copy_media_files(clean_value, media_subfolder)
+                    fields_values.append(minified_value)
+                
+                # Process tags
+                tags = " ".join(note["tags"])
+                fields_values.append(tags)
+                
+                writer.writerow(fields_values)
+                count += 1
+                
+        print(f"✅ OK ({count} cartes)\n")
+        
+    except Exception as e:
+        print(f"❌ ERREUR écriture CSV : {e}\n")
+
+def main():
+    print("="*60)
+    print("📤 EXPORT DECKS + MÉDIAS")
+    print("="*60)
+    
+    # Get deck list
+    response = anki_connect_request("deckNames")
+    if not response:
+        return
+        
     all_decks = response["result"]
     
     print("\n--- DECKS DISPONIBLES ---")
@@ -106,84 +144,26 @@ def main():
     user_input = input("\nEntrez les numéros à exporter (séparés par une virgule, ou 'all') : ")
     
     target_decks = []
-    if user_input.lower().strip() == 'all' or user_input.strip() == '':
+    if user_input.lower().strip() in ['all', '']:
         target_decks = all_decks
     else:
         try:
             indices = [int(x.strip()) for x in user_input.split(",")]
-            for i in indices:
-                if 0 <= i < len(all_decks):
-                    target_decks.append(all_decks[i])
+            target_decks = [all_decks[i] for i in indices if 0 <= i < len(all_decks)]
         except ValueError:
             print("[ERREUR] Saisie invalide.")
             return
 
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
-
+        
     print(f"\nDébut de l'export pour {len(target_decks)} deck(s)...\n")
-
+    
     for deck in target_decks:
-        print(f"📦 Export de '{deck}'...")
+        export_deck(deck)
         
-        # Déterminer le dossier média (utiliser le premier mot du deck)
-        # Ex: "PTSI::Maths" -> "maths"
-        media_subfolder = slugify(deck.split("::")[-1])
-        
-        find_notes = request("findNotes", query=f'"deck:{deck}"')
-        notes_info = request("notesInfo", notes=find_notes["result"])
-        
-            # On découpe le nom du deck
-        parts = deck.split("::")
-
-        # Cas 1 : Deck seul (ex: "Vocabulaire")
-        if len(parts) == 1:
-            matiere = "divers"
-            safe_filename = slugify(parts[0])
-        # Cas 2 : Deck avec sous-paquets (ex: "SI::Cycle5::Torseur")
-        else:
-            # La matière est toujours le premier mot
-            matiere = slugify(parts[0])
-            # Le nom du fichier est la suite, jointe par des underscores
-            safe_filename = "_".join([slugify(p) for p in parts[1:]])
-
-        # Création du dossier par matière : decks/matiere/
-        # (matiere sera "si", "maths", "anglais", etc.)
-        matiere_dir = os.path.join(OUTPUT_DIR, matiere)
-        os.makedirs(matiere_dir, exist_ok=True)
-
-        # Nom final du fichier CSV
-        filename = os.path.join(matiere_dir, f"{safe_filename}.csv")
-
-        
-        try:
-            with open(filename, "w", encoding="utf-8-sig", newline="") as f:
-                writer = csv.writer(f, delimiter=";")
-                
-                count = 0
-                for note in notes_info["result"]:
-                    fields_values = []
-                    
-                    for f_obj in note["fields"].values():
-                        raw_value = f_obj["value"]
-                        clean_value = html.unescape(raw_value)
-                        
-                        # NOUVEAU : Copier les images et modifier les chemins
-                        modified_value = copy_media_files(clean_value, deck, media_subfolder)
-                        
-                        fields_values.append(modified_value)
-                    
-                    tags = " ".join(note["tags"])
-                    fields_values.append(tags)
-                    
-                    writer.writerow(fields_values)
-                    count += 1
-            print(f"✅ OK ({count} cartes avec images copiées)\n")
-            
-        except Exception as e:
-            print(f"❌ ERREUR : {e}\n")
-
-    print("--- Terminé ! N'oublie pas : git add . && git commit && git push ---")
+    print("="*60)
+    print("Terminé ! N'oublie pas : git add . && git commit && git push")
 
 if __name__ == "__main__":
     main()
