@@ -62,13 +62,13 @@
     pointer-events: none;
 }
 
-body.light-theme .iridescence-overlay {
+:root.light-theme .iridescence-overlay {
     background: radial-gradient(ellipse at center,
             rgba(255, 255, 255, 0.05) 0%,
             rgba(240, 244, 248, 0.2) 100%);
 }
 
-body.light-theme #iridescence-bg.iridescence-fallback {
+:root.light-theme #iridescence-bg.iridescence-fallback {
     background: linear-gradient(135deg,
             #e2e8f0 0%,
             #cbd5e1 25%,

@@ -48,7 +48,7 @@ void main() {
   
   if (uIsLight > 0.5) {
       // Light Mode: mix pastel white with the dark iridescent colors
-      vec3 lightBlend = mix(vec3(0.96, 0.98, 1.0), darkCol, 0.15);
+      vec3 lightBlend = mix(vec3(0.96, 0.98, 1.0), darkCol, 0.4);
       gl_FragColor = vec4(lightBlend, 1.0);
   } else {
       gl_FragColor = vec4(darkCol, 1.0);

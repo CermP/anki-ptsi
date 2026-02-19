@@ -31,14 +31,14 @@
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body.light-theme {
+:root.light-theme {
     /* Light Theme Palette - Enhanced Contrast */
     --bg-main: #f0f4f8;
     /* Softer light gray for main bg */
     --bg-card: #ffffff;
     /* Pure white for cards to pop out */
-    --bg-card-hover: #e2e8f0;
-    /* Slight gray on hover */
+    --bg-card-hover: #ffffff;
+    /* pure white on hover according to feedback */
     --text-primary: #1e293b;
     /* Dark slate for high contrast */
     --text-secondary: #475569;
@@ -126,7 +126,7 @@ a {
     transition: all 0.3s ease;
 }
 
-body.light-theme .glass-navbar {
+:root.light-theme .glass-navbar {
     background: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -137,7 +137,7 @@ body.light-theme .glass-navbar {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
-body.light-theme .glass-navbar:hover {
+:root.light-theme .glass-navbar:hover {
     background: rgba(255, 255, 255, 0.9);
     border-color: rgba(59, 130, 246, 0.3);
 }
@@ -180,7 +180,7 @@ body.light-theme .glass-navbar:hover {
     background: rgba(255, 255, 255, 0.05);
 }
 
-body.light-theme .glass-nav-link:hover {
+:root.light-theme .glass-nav-link:hover {
     background: rgba(0, 0, 0, 0.05);
 }
 
@@ -190,12 +190,12 @@ body.light-theme .glass-nav-link:hover {
     font-weight: 600;
 }
 
-body.light-theme .glass-nav-link.active {
+:root.light-theme .glass-nav-link.active {
     color: var(--bg-card);
     /* White text on blue background */
 }
 
-body.light-theme .glass-nav-link.active:hover {
+:root.light-theme .glass-nav-link.active:hover {
     background: var(--accent-primary);
     /* Prevents the grey hover override */
     color: var(--bg-card);
@@ -225,7 +225,7 @@ body.light-theme .glass-nav-link.active:hover {
     height: 1.25rem;
 }
 
-body.light-theme .theme-toggle:hover {
+:root.light-theme .theme-toggle:hover {
     background: rgba(0, 0, 0, 0.05);
 }
 
@@ -290,7 +290,7 @@ body.light-theme .theme-toggle:hover {
     /* Stronger shadow */
 }
 
-body.light-theme .hero-badge {
+:root.light-theme .hero-badge {
     background: rgba(255, 255, 255, 0.7);
     border-color: rgba(59, 130, 246, 0.3);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -311,7 +311,7 @@ body.light-theme .hero-badge {
     /* Added subtle shadow */
 }
 
-body.light-theme .hero-title {
+:root.light-theme .hero-title {
     text-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -339,7 +339,7 @@ body.light-theme .hero-title {
     /* Medium weight */
 }
 
-body.light-theme .landing-hero .hero-subtitle {
+:root.light-theme .landing-hero .hero-subtitle {
     color: var(--text-secondary);
     text-shadow: none;
 }
@@ -383,8 +383,8 @@ body.light-theme .landing-hero .hero-subtitle {
     border: 1px solid var(--bg-card-hover);
 }
 
-body.light-theme .btn-secondary {
-    background: rgba(255, 255, 255, 0.7);
+:root.light-theme .btn-secondary {
+    background: #ffffff;
     color: var(--text-primary);
     border-color: rgba(0, 0, 0, 0.1);
 }
@@ -395,7 +395,7 @@ body.light-theme .btn-secondary {
     transform: translateY(-2px);
 }
 
-body.light-theme .btn-secondary:hover {
+:root.light-theme .btn-secondary:hover {
     background: #ffffff;
 }
 
@@ -456,10 +456,14 @@ body.light-theme .btn-secondary:hover {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-body.light-theme .about-card {
-    background: rgba(255, 255, 255, 0.6);
+:root.light-theme .about-card {
+    background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+}
+
+:root.light-theme .about-card:hover {
+    background: #ffffff;
 }
 
 .about-card:hover {
@@ -548,10 +552,14 @@ body.light-theme .about-card {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-body.light-theme .contribute-card {
-    background: rgba(255, 255, 255, 0.6) !important;
+:root.light-theme .contribute-card {
+    background: #ffffff !important;
     border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+}
+
+:root.light-theme .contribute-card:hover {
+    background: #ffffff !important;
 }
 
 .contribute-card:hover {
@@ -662,7 +670,7 @@ header::before {
     backdrop-filter: blur(4px);
 }
 
-body.light-theme .stat-badge {
+:root.light-theme .stat-badge {
     background: rgba(255, 255, 255, 0.6);
     border-color: rgba(0, 0, 0, 0.05);
     color: var(--text-primary);
@@ -685,19 +693,19 @@ body.light-theme .stat-badge {
     width: 100%;
 }
 
-body.light-theme .search-control .search-input {
+:root.light-theme .search-control .search-input {
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-body.light-theme .search-control .search-input:focus {
+:root.light-theme .search-control .search-input:focus {
     background: #ffffff;
     border-color: var(--accent-primary);
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
 }
 
-body.light-theme .search-shortcut {
+:root.light-theme .search-shortcut {
     background: rgba(0, 0, 0, 0.05);
     border-color: rgba(0, 0, 0, 0.1);
     color: var(--text-muted);

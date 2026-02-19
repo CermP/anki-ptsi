@@ -19,7 +19,7 @@
     }
 
     // Since this runs in head, document.body might not be ready. We set a class on html.
-    // So we need to ensure the CSS uses :root.light-theme or body.light-theme.
+    // So we need to ensure the CSS uses :root.light-theme or :root.light-theme.
     // Wait, let's just use html.light-theme for safety or set it when body is available.
 
     // Actually, setting on documentElement is safer here.
@@ -28,7 +28,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        // Also apply to body to be safe, since our CSS used body.light-theme
+        // Also apply to body to be safe, since our CSS used :root.light-theme
         if (theme === 'light') {
             document.body.classList.add('light-theme');
         }
