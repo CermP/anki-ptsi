@@ -957,6 +957,261 @@ footer a:hover {
     display: none !important;
 }
 
+/* ===================================================
+   DECK ACTIONS & SMALL BUTTONS
+   =================================================== */
+.deck-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    flex-grow: 1;
+    /* Make standard buttons fill available space */
+}
+
+/* Make preview button slightly less prominent than download */
+.preview-btn {
+    flex-grow: 0.5;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    background: rgba(59, 66, 82, 0.5);
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-card-hover);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+:root.light-theme .btn-icon {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-secondary);
+}
+
+.btn-icon:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+:root.light-theme .btn-icon:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+}
+
+.btn-icon:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ===================================================
+   TOAST NOTIFICATION
+   =================================================== */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--accent-primary);
+    color: var(--bg-main);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ===================================================
+   PREVIEW MODAL
+   =================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    /* display: flex maintained, visibility handled by opacity/pointer-events */
+}
+
+.modal-container {
+    background: var(--bg-main);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 800px;
+    height: 85vh;
+    /* Large consistent height */
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--bg-card-hover);
+    transform: translateY(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root.light-theme .modal-container {
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-overlay.hidden .modal-container {
+    transform: translateY(20px);
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background: transparent;
+    border: none;
+}
+
+.modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--bg-card-hover);
+    text-align: center;
+}
+
+:root.light-theme .modal-header {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    padding-right: 2rem;
+    /* prevent overlap with close btn */
+}
+
+.modal-progress {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Flashcard Container and Flip logic */
+.flashcard-container {
+    flex-grow: 1;
+    padding: 2rem;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-card);
+    /* slight contrast against modal bg */
+}
+
+.flashcard {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    min-height: 300px;
+    max-height: 500px;
+    position: relative;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg-main);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--bg-card-hover);
+    box-shadow: var(--shadow-md);
+    overflow-y: auto;
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.flashcard-face img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: var(--radius-md);
+    margin: 1rem 0;
+}
+
+:root.light-theme .flashcard-face {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.flashcard-back {
+    transform: rotateY(180deg);
+    border-color: var(--accent-primary);
+}
+
+/* Modal Controls */
+.modal-controls {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--bg-card-hover);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+:root.light-theme .modal-controls {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-flip {
+    min-width: 150px;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {

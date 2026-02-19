@@ -5,7 +5,9 @@ import csv
 import os
 import re
 import sys
+import shutil
 import genanki
+import json
 from typing import List, Tuple
 from utils import slugify
 
@@ -17,6 +19,8 @@ BASE_DIR = os.path.dirname(SCRIPT_DIR)
 DECKS_DIR = os.path.join(BASE_DIR, "decks")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 OUTPUT_DIR = os.path.join(BASE_DIR, "docs")
+PREVIEWS_DIR = os.path.join(OUTPUT_DIR, "previews")
+OUT_MEDIA_DIR = os.path.join(OUTPUT_DIR, "media")
 
 # --- ANKI MODEL ---
 MODEL_ID = 1607392319
@@ -106,7 +110,7 @@ def find_media_files(media_refs: List[str], media_subfolder: str) -> List[str]:
             
     return create_package_media
 
-def generate_deck_package(csv_path: str, subject_folder: str) -> bool:
+def generate_deck_package(csv_path: str, subject_folder: str) -> Tuple[bool, int, str]:
     """Génère un paquet .apkg à partir d'un fichier CSV."""
     filename = os.path.basename(csv_path)
     base_name = filename.replace('.csv', '')
@@ -124,13 +128,34 @@ def generate_deck_package(csv_path: str, subject_folder: str) -> bool:
     
     notes, media_refs = process_csv_rows(csv_path)
     if not notes:
-        return False
+        return False, 0, output_filename
 
     deck = genanki.Deck(get_unique_deck_id(deck_name), deck_name)
     for note in notes:
         deck.add_note(note)
         
     media_files = find_media_files(media_refs, media_subfolder)
+    
+    # Copy media files to docs/media for previews
+    for m_file in media_files:
+        dest = os.path.join(OUT_MEDIA_DIR, os.path.basename(m_file))
+        if not os.path.exists(dest):
+            shutil.copy2(m_file, dest)
+            
+    # Generate JSON preview data
+    preview_notes = []
+    for note in notes:
+        # replace src="img.jpg" with src="media/img.jpg" for the web preview
+        front_html = note.fields[0].replace('src="', 'src="media/').replace("src='", "src='media/")
+        back_html = note.fields[1].replace('src="', 'src="media/').replace("src='", "src='media/")
+        preview_notes.append({"front": front_html, "back": back_html})
+        
+    preview_path = os.path.join(PREVIEWS_DIR, output_filename.replace('.apkg', '.json'))
+    try:
+        with open(preview_path, 'w', encoding='utf-8') as f:
+            json.dump(preview_notes, f, ensure_ascii=False)
+    except Exception as e:
+        print(f"   ⚠️ Erreur sauvegarde preview : {e}")
     
     # Save package
     output_path = os.path.join(OUTPUT_DIR, output_filename)
@@ -139,12 +164,12 @@ def generate_deck_package(csv_path: str, subject_folder: str) -> bool:
     
     try:
         package.write_to_file(output_path)
-        print(f"   ✅ Créé : {len(notes)} cartes, {len(media_files)} images")
+        print(f"   ✅ Créé : {len(notes)} cartes, {len(media_files)} images, 1 preview")
         print()
-        return True
+        return True, len(notes), output_filename
     except Exception as e:
         print(f"   ❌ Erreur écriture .apkg : {e}")
-        return False
+        return False, 0, output_filename
 
 def main() -> None:
     print("="*60)
@@ -154,8 +179,13 @@ def main() -> None:
     
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
+    if not os.path.exists(PREVIEWS_DIR):
+        os.makedirs(PREVIEWS_DIR)
+    if not os.path.exists(OUT_MEDIA_DIR):
+        os.makedirs(OUT_MEDIA_DIR)
         
     stats = {'processed': 0, 'success': 0, 'errors': 0}
+    apkg_meta = {}
     
     for root, _, files in os.walk(DECKS_DIR):
         relative_path = os.path.relpath(root, DECKS_DIR)
@@ -175,10 +205,16 @@ def main() -> None:
                 stats['processed'] += 1
                 csv_path = os.path.join(root, csv_file)
                 
-                if generate_deck_package(csv_path, subject_folder):
+                success, card_count, out_name = generate_deck_package(csv_path, subject_folder)
+                if success:
                     stats['success'] += 1
+                    apkg_meta[out_name] = {'cards': card_count}
                 else:
                     stats['errors'] += 1
+                    
+    # Save meta json
+    with open(os.path.join(OUTPUT_DIR, 'apkg_meta.json'), 'w', encoding='utf-8') as f:
+        json.dump(apkg_meta, f, ensure_ascii=False, indent=2)
                     
     print("="*60)
     print(f"✨ RÉSUMÉ")

@@ -19,9 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
+            const query = e.target.value.trim();
             filterDecks(query);
         });
+    }
+
+    // Utility function to remove accents and convert to lowercase
+    function normalizeText(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
 
     function filterDecks(query) {
@@ -35,16 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const normalizedQuery = normalizeText(query);
+        const queryTokens = normalizedQuery.split(/\s+/).filter(token => token.length > 0);
+
         subjectSections.forEach(section => {
             const sectionCards = section.querySelectorAll('.deck-card');
             let hasVisibleCards = false;
 
-            const subject = section.querySelector('.subject-title').textContent.toLowerCase();
+            const subject = normalizeText(section.querySelector('.subject-title').textContent);
 
             sectionCards.forEach(card => {
-                const title = card.querySelector('.deck-name').textContent.toLowerCase();
+                const title = normalizeText(card.querySelector('.deck-name').textContent);
+                const searchableContent = subject + " " + title;
 
-                if (title.includes(query) || subject.includes(query)) {
+                // Check if ALL words/tokens from the query are found in the content (AND logic)
+                const isMatch = queryTokens.every(token => searchableContent.includes(token));
+
+                if (isMatch) {
                     card.classList.remove('hidden');
                     hasVisibleCards = true;
                     visibleCount++;

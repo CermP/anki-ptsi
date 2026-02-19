@@ -56,6 +56,7 @@
 
             <div class="stats-container">
                 <div class="stat-badge"><strong>{{ total_decks }}</strong> Decks</div>
+                <div class="stat-badge"><strong>{{ total_cards }}</strong> Cartes</div>
                 <div class="stat-badge"><strong>{{ total_subjects }}</strong> Matières</div>
             </div>
         </div>
@@ -79,15 +80,30 @@
             </div>
             <div class="deck-grid">
                 {% for deck in decks %}
-                <div class="deck-card">
+                <div class="deck-card" id="deck-{{ deck.url | replace('.apkg', '') }}">
                     <div class="deck-info">
                         <h3 class="deck-name">{{ deck.name }}</h3>
                         <div class="deck-meta">
                             <span>{{ deck.date }}</span>
                             <span>{{ deck.size }}</span>
+                            <span>{{ deck.cards }} cartes</span>
                         </div>
                     </div>
-                    <a href="{{ deck.url }}" class="download-btn" download>Télécharger</a>
+                    <div class="deck-actions">
+                        <button class="btn-icon copy-link-btn" aria-label="Copier le lien"
+                            data-deck-id="deck-{{ deck.url | replace('.apkg', '') }}" title="Copier le lien">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-secondary btn-sm preview-btn"
+                            data-preview-url="previews/{{ deck.url | replace('.apkg', '.json') }}"
+                            data-deck-title="{{ deck.name }}">Aperçu</button>
+                        <a href="{{ deck.url }}" class="btn btn-primary btn-sm download-btn" download>Télécharger</a>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -103,7 +119,57 @@
             <p class="footer-note">Contribuez sur GitHub pour ajouter vos propres decks !</p>
         </div>
     </footer>
+
+    <!-- Toast Notification for Copy Link -->
+    <div id="toast-notification" class="toast hidden">Lien copié !</div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal-overlay hidden" aria-hidden="true">
+        <div class="modal-container">
+            <button id="close-modal" class="btn-icon close-btn" aria-label="Fermer l'aperçu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="modal-header">
+                <h3 id="modal-deck-title" class="modal-title">Aperçu du Deck</h3>
+                <div class="modal-progress">Carte <span id="current-card-idx">1</span> / <span
+                        id="total-cards-count">--</span></div>
+            </div>
+
+            <div id="flashcard-container" class="flashcard-container">
+                <div id="flashcard" class="flashcard">
+                    <div id="flashcard-front" class="flashcard-face flashcard-front">
+                        <!-- Front content injected here -->
+                    </div>
+                    <div id="flashcard-back" class="flashcard-face flashcard-back">
+                        <!-- Back content injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-controls">
+                <button id="prev-card" class="btn-icon nav-btn" aria-label="Carte précédente" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button id="flip-card" class="btn btn-primary btn-flip">Retourner</button>
+                <button id="next-card" class="btn-icon nav-btn" aria-label="Carte suivante" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
+    <script src="js/preview.js"></script>
 </body>
 
 </html>

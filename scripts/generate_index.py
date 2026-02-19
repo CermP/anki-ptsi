@@ -31,6 +31,12 @@ def collect_decks_info() -> Dict[str, List[Dict[str, str]]]:
         print(f"❌ Dossier introuvable : {OUTPUT_DIR}")
         return {}
 
+    meta_path = OUTPUT_DIR / 'apkg_meta.json'
+    apkg_meta = {}
+    if meta_path.exists():
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            apkg_meta = json.load(f)
+
     apkg_files = sorted(OUTPUT_DIR.glob("*.apkg"))
     print(f"🔍 Fichiers .apkg trouvés : {len(apkg_files)}")
     
@@ -50,16 +56,19 @@ def collect_decks_info() -> Dict[str, List[Dict[str, str]]]:
         if subject not in decks_by_subject:
             decks_by_subject[subject] = []
             
+        card_count = apkg_meta.get(filename, {}).get('cards', 0)
+        
         deck_info = {
             'name': title,
             'filename': filename,
             'size': get_file_size_str(filepath),
             'date': date.fromtimestamp(filepath.stat().st_mtime).strftime("%d/%m/%Y"),
-            'url': quote(filename)
+            'url': quote(filename),
+            'cards': card_count
         }
         
         decks_by_subject[subject].append(deck_info)
-        print(f"   ✅ {subject} : {title} ({deck_info['size']})")
+        print(f"   ✅ {subject} : {title} ({deck_info['size']}, {card_count} cartes)")
         
     return decks_by_subject
 
@@ -116,6 +125,7 @@ def save_html(data: Dict[str, List[Dict[str, str]]]) -> None:
     """Génère et sauvegarde le fichier decks.html via Jinja2."""
     total_decks = sum(len(d) for d in data.values()) if data else 0
     total_subjects = len(data) if data else 0
+    total_cards = sum(deck.get('cards', 0) for d in data.values() for deck in d) if data else 0
     
     env = Environment(loader=FileSystemLoader(str(SCRIPT_PATH.parent / 'templates')))
     template = env.get_template('decks_template.html')
@@ -123,7 +133,8 @@ def save_html(data: Dict[str, List[Dict[str, str]]]) -> None:
     html_content = template.render(
         data=data,
         total_decks=total_decks,
-        total_subjects=total_subjects
+        total_subjects=total_subjects,
+        total_cards=total_cards
     )
     
     html_path = OUTPUT_DIR / 'decks.html'

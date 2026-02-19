@@ -4,22 +4,25 @@
       "name": "Unité7",
       "filename": "Anglais-Unité7.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Anglais-Unit%C3%A97.apkg"
+      "date": "20/02/2026",
+      "url": "Anglais-Unit%C3%A97.apkg",
+      "cards": 66
     },
     {
       "name": "factssequences 1 6",
       "filename": "Anglais-factssequences_1_6.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Anglais-factssequences_1_6.apkg"
+      "date": "20/02/2026",
+      "url": "Anglais-factssequences_1_6.apkg",
+      "cards": 23
     },
     {
       "name": "vocabulary list",
       "filename": "Anglais-vocabulary_list.apkg",
       "size": "76.2 KB",
-      "date": "19/02/2026",
-      "url": "Anglais-vocabulary_list.apkg"
+      "date": "20/02/2026",
+      "url": "Anglais-vocabulary_list.apkg",
+      "cards": 140
     }
   ],
   "Chimie": [
@@ -27,8 +30,9 @@
       "name": "Acides et Bases à connaitre",
       "filename": "Chimie-Acides_et_Bases_à_connaitre.apkg",
       "size": "52.2 KB",
-      "date": "19/02/2026",
-      "url": "Chimie-Acides_et_Bases_%C3%A0_connaitre.apkg"
+      "date": "20/02/2026",
+      "url": "Chimie-Acides_et_Bases_%C3%A0_connaitre.apkg",
+      "cards": 21
     }
   ],
   "Maths": [
@@ -36,113 +40,129 @@
       "name": "Chapitre 10 - Ensembles et applications",
       "filename": "Maths-Chapitre 10 - Ensembles et applications.apkg",
       "size": "68.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%2010%20-%20Ensembles%20et%20applications.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%2010%20-%20Ensembles%20et%20applications.apkg",
+      "cards": 31
     },
     {
       "name": "Chapitre 13 - Systèmes linéaires et matrices",
       "filename": "Maths-Chapitre 13 - Systèmes linéaires et matrices.apkg",
       "size": "72.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%2013%20-%20Syst%C3%A8mes%20lin%C3%A9aires%20et%20matrices.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%2013%20-%20Syst%C3%A8mes%20lin%C3%A9aires%20et%20matrices.apkg",
+      "cards": 57
     },
     {
       "name": "Chapitre 5 - Primitives",
       "filename": "Maths-Chapitre 5 - Primitives.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%205%20-%20Primitives.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%205%20-%20Primitives.apkg",
+      "cards": 15
     },
     {
       "name": "Chapitre 6 - Équations différentielles linéaires",
       "filename": "Maths-Chapitre 6 - Équations différentielles linéaires.apkg",
       "size": "64.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%206%20-%20%C3%89quations%20diff%C3%A9rentielles%20lin%C3%A9aires.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%206%20-%20%C3%89quations%20diff%C3%A9rentielles%20lin%C3%A9aires.apkg",
+      "cards": 14
     },
     {
       "name": "Chapitre 7 - Arithmétique et ensemble de réels",
       "filename": "Maths-Chapitre 7 - Arithmétique et ensemble de réels.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%207%20-%20Arithm%C3%A9tique%20et%20ensemble%20de%20r%C3%A9els.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%207%20-%20Arithm%C3%A9tique%20et%20ensemble%20de%20r%C3%A9els.apkg",
+      "cards": 19
     },
     {
       "name": "Chapitre 8 - Suites numériques",
       "filename": "Maths-Chapitre 8 - Suites numériques.apkg",
       "size": "72.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%208%20-%20Suites%20num%C3%A9riques.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%208%20-%20Suites%20num%C3%A9riques.apkg",
+      "cards": 41
     },
     {
       "name": "Chapitre 9 - Développement limités",
       "filename": "Maths-Chapitre 9 - Développement limités.apkg",
       "size": "68.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre%209%20-%20D%C3%A9veloppement%20limit%C3%A9s.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre%209%20-%20D%C3%A9veloppement%20limit%C3%A9s.apkg",
+      "cards": 42
     },
     {
       "name": "Chapitre 1.A. - Analyse Généralités",
       "filename": "Maths-Chapitre_1.A._-_Analyse_Généralités.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre_1.A._-_Analyse_G%C3%A9n%C3%A9ralit%C3%A9s.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre_1.A._-_Analyse_G%C3%A9n%C3%A9ralit%C3%A9s.apkg",
+      "cards": 16
     },
     {
       "name": "Chapitre 1.B. - Premières fonctions usuelles",
       "filename": "Maths-Chapitre_1.B._-_Premières_fonctions_usuelles.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre_1.B._-_Premi%C3%A8res_fonctions_usuelles.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre_1.B._-_Premi%C3%A8res_fonctions_usuelles.apkg",
+      "cards": 28
     },
     {
       "name": "Chapitre 11 Limites et continuité",
       "filename": "Maths-Chapitre_11_Limites_et_continuité.apkg",
       "size": "72.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre_11_Limites_et_continuit%C3%A9.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre_11_Limites_et_continuit%C3%A9.apkg",
+      "cards": 46
     },
     {
       "name": "Chapitre 2 - Logique, raisonnements, calculs algébriques",
       "filename": "Maths-Chapitre_2_-_Logique,_raisonnements,_calculs_algébriques.apkg",
       "size": "52.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre_2_-_Logique%2C_raisonnements%2C_calculs_alg%C3%A9briques.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre_2_-_Logique%2C_raisonnements%2C_calculs_alg%C3%A9briques.apkg",
+      "cards": 23
     },
     {
       "name": "Chapitre 3 - Nouvelles fonctions usuelles",
       "filename": "Maths-Chapitre_3_-_Nouvelles_fonctions_usuelles.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Chapitre_3_-_Nouvelles_fonctions_usuelles.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Chapitre_3_-_Nouvelles_fonctions_usuelles.apkg",
+      "cards": 18
     },
     {
       "name": "Développements limités usuels en 0",
       "filename": "Maths-Développements_limités_usuels_en_0.apkg",
       "size": "52.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-D%C3%A9veloppements_limit%C3%A9s_usuels_en_0.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-D%C3%A9veloppements_limit%C3%A9s_usuels_en_0.apkg",
+      "cards": 11
     },
     {
       "name": "Plans de cours",
       "filename": "Maths-Plans_de_cours.apkg",
       "size": "68.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-Plans_de_cours.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-Plans_de_cours.apkg",
+      "cards": 52
     },
     {
       "name": "chapitre 12 derivation",
       "filename": "Maths-chapitre_12_derivation.apkg",
       "size": "64.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-chapitre_12_derivation.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-chapitre_12_derivation.apkg",
+      "cards": 37
     },
     {
       "name": "chapitre 4 complexes",
       "filename": "Maths-chapitre_4_complexes.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "Maths-chapitre_4_complexes.apkg"
+      "date": "20/02/2026",
+      "url": "Maths-chapitre_4_complexes.apkg",
+      "cards": 24
     }
   ],
   "Si": [
@@ -150,15 +170,17 @@
       "name": "Cycle5-Valeurs et caractéristiques à connaitre",
       "filename": "SI-Cycle5-Valeurs_et_caractéristiques_à_connaitre.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "SI-Cycle5-Valeurs_et_caract%C3%A9ristiques_%C3%A0_connaitre.apkg"
+      "date": "20/02/2026",
+      "url": "SI-Cycle5-Valeurs_et_caract%C3%A9ristiques_%C3%A0_connaitre.apkg",
+      "cards": 39
     },
     {
       "name": "cycle6 torseur cinematique liaisons",
       "filename": "SI-cycle6_torseur_cinematique_liaisons.apkg",
       "size": "60.2 KB",
-      "date": "19/02/2026",
-      "url": "SI-cycle6_torseur_cinematique_liaisons.apkg"
+      "date": "20/02/2026",
+      "url": "SI-cycle6_torseur_cinematique_liaisons.apkg",
+      "cards": 11
     }
   ]
 }
