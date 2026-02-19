@@ -6,6 +6,8 @@ import os
 from datetime import date
 from urllib.parse import quote
 from pathlib import Path
+from typing import Dict, List, Any
+from jinja2 import Environment, FileSystemLoader
 
 # --- CONFIGURATION ---
 SCRIPT_PATH = Path(__file__).resolve()
@@ -14,14 +16,14 @@ OUTPUT_DIR = BASE_DIR / "docs"
 
 BASE_URL = "https://cermp.github.io/anki-ptsi/"
 
-def get_file_size_str(filepath):
+def get_file_size_str(filepath: Path) -> str:
     """Retourne la taille du fichier formatée (KB/MB)."""
     size_bytes = filepath.stat().st_size
     if size_bytes < 1024 * 1024:
         return f"{size_bytes / 1024:.1f} KB"
     return f"{size_bytes / (1024 * 1024):.1f} MB"
 
-def collect_decks_info():
+def collect_decks_info() -> Dict[str, List[Dict[str, str]]]:
     """Parcourt le dossier docs/ pour trouver les fichiers .apkg."""
     decks_by_subject = {}
     
@@ -61,7 +63,7 @@ def collect_decks_info():
         
     return decks_by_subject
 
-def save_json(data):
+def save_json(data: Dict[str, List[Dict[str, str]]]) -> None:
     """Sauvegarde les données dans decks.json."""
     json_path = OUTPUT_DIR / 'decks.json'
     try:
@@ -71,7 +73,7 @@ def save_json(data):
     except Exception as e:
         print(f"❌ Erreur JSON : {e}")
 
-def save_sitemap(data):
+def save_sitemap(data: Dict[str, List[Dict[str, str]]]) -> None:
     """Génère le sitemap.xml."""
     today = date.today().isoformat()
     
@@ -110,113 +112,21 @@ def save_sitemap(data):
     except Exception as e:
         print(f"❌ Erreur Sitemap : {e}")
 
-def generate_html_content(data):
-    """Génère le contenu HTML de la page des decks."""
+def save_html(data: Dict[str, List[Dict[str, str]]]) -> None:
+    """Génère et sauvegarde le fichier decks.html via Jinja2."""
     total_decks = sum(len(d) for d in data.values()) if data else 0
     total_subjects = len(data) if data else 0
     
-    # Header logic
-    html = f'''<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anki PTSI — Téléchargement des Decks</title>
-    <meta name="description" content="Téléchargez les decks Anki pour la PTSI.">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/GlassSurface.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-    <nav class="glass-navbar">
-        <a href="index.html" class="glass-brand">Anki PTSI</a>
-        <div class="glass-nav-links">
-            <a href="index.html" class="glass-nav-link">Accueil</a>
-            <a href="decks.html" class="glass-nav-link active">Decks</a>
-            <a href="https://github.com/CermP/anki-ptsi" target="_blank" class="glass-nav-link">GitHub</a>
-        </div>
-    </nav>
-
-    <header>
-        <div class="container hero-content">
-            <h1 class="hero-title">Anki PTSI</h1>
-            <p class="hero-subtitle">Mémorisez vos cours efficacement.</p>
-            
-            <div class="search-container">
-                <div class="search-control">
-                    <div class="search-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5" style="width: 1.25rem; height: 1.25rem;">
-                          <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher...">
-                    <div class="search-shortcut">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5" style="width: 1.25rem; height: 1.25rem;">
-                          <path fill-rule="evenodd" d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-badge"><strong>{total_decks}</strong> Decks</div>
-                <div class="stat-badge"><strong>{total_subjects}</strong> Matières</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="container main-content">
-'''
+    env = Environment(loader=FileSystemLoader(str(SCRIPT_PATH.parent / 'templates')))
+    template = env.get_template('decks_template.html')
     
-    if not data:
-        html += '<div class="empty-state"><h2>Aucun deck disponible</h2></div>'
-    else:
-        # No results hidden div
-        html += '''<div id="no-results" class="no-results" style="display: none;">
-            <h3>Aucun résultat trouvé.</h3>
-        </div>'''
-        
-        for subject in sorted(data.keys()):
-            html += f'''
-            <section class="subject-section">
-                <div class="subject-header">
-                    <span class="subject-icon"></span>
-                    <h2 class="subject-title">{subject}</h2>
-                </div>
-                <div class="deck-grid">'''
-                
-            for deck in data[subject]:
-                html += f'''
-                    <div class="deck-card">
-                        <div class="deck-info">
-                            <h3 class="deck-name">{deck['name']}</h3>
-                            <div class="deck-meta">
-                                <span>{deck['date']}</span>
-                                <span>{deck['size']}</span>
-                            </div>
-                        </div>
-                        <a href="{deck['url']}" class="download-btn" download>Télécharger</a>
-                    </div>'''
-            html += '</div></section>'
-
-    html += '''
-    </div>
-    <footer>
-        <div class="container">
-            <p>Projet open source maintenu par <a href="https://github.com/CermP/anki-ptsi" target="_blank" rel="noopener">CermP</a></p>
-            <p class="footer-note">Contribuez sur GitHub pour ajouter vos propres decks !</p>
-        </div>
-    </footer>
-    <script src="js/main.js"></script>
-</body>
-</html>'''
-    return html
-
-def save_html(data):
-    """Sauvegarde le fichier decks.html."""
-    html_content = generate_html_content(data)
+    html_content = template.render(
+        data=data,
+        total_decks=total_decks,
+        total_subjects=total_subjects
+    )
+    
     html_path = OUTPUT_DIR / 'decks.html'
-    
     try:
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
@@ -224,7 +134,7 @@ def save_html(data):
     except Exception as e:
         print(f"❌ Erreur HTML : {e}")
 
-def main():
+def main() -> None:
     print("="*60)
     print("📊 GÉNÉRATION INDEX DECKS")
     print("="*60)

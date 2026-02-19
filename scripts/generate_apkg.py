@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import genanki
+from typing import List, Tuple
 from utils import slugify
 
 # --- CONFIGURATION ---
@@ -30,11 +31,11 @@ PTSI_MODEL = genanki.Model(
     }]
 )
 
-def get_unique_deck_id(deck_name):
+def get_unique_deck_id(deck_name: str) -> int:
     """Génère un ID unique pour le deck basé sur son nom."""
     return abs(hash(deck_name)) % (10 ** 8)
 
-def clean_deck_name(base_name, subject_folder):
+def clean_deck_name(base_name: str, subject_folder: str) -> str:
     """Nettoie le nom du fichier pour obtenir le nom du titre."""
     prefix_dash = f"{subject_folder.lower()}-"
     prefix_underscore = f"{subject_folder.lower()}_"
@@ -47,16 +48,16 @@ def clean_deck_name(base_name, subject_folder):
     
     return base_name
 
-def extract_media_refs(text):
+def extract_media_refs(text: str) -> List[str]:
     """Extrait les références d'images src="..."."""
     return re.findall(r'src="([^"]+)"', text)
 
-def clean_media_paths(text):
+def clean_media_paths(text: str) -> str:
     """Nettoie les chemins d'images pour Anki."""
     # Transforme <img src="../media/si/photo.jpg"> en <img src="photo.jpg">
     return re.sub(r'src="[^"]*/([^"/]+)"', r'src="\1"', text)
 
-def process_csv_rows(csv_path):
+def process_csv_rows(csv_path: str) -> Tuple[List[genanki.Note], List[str]]:
     """Lit un fichier CSV et génère des notes."""
     notes = []
     media_refs = []
@@ -89,7 +90,7 @@ def process_csv_rows(csv_path):
         
     return notes, media_refs
 
-def find_media_files(media_refs, media_subfolder):
+def find_media_files(media_refs: List[str], media_subfolder: str) -> List[str]:
     """Trouve les fichiers images correspondants dans media/."""
     create_package_media = []
     
@@ -105,7 +106,7 @@ def find_media_files(media_refs, media_subfolder):
             
     return create_package_media
 
-def generate_deck_package(csv_path, subject_folder):
+def generate_deck_package(csv_path: str, subject_folder: str) -> bool:
     """Génère un paquet .apkg à partir d'un fichier CSV."""
     filename = os.path.basename(csv_path)
     base_name = filename.replace('.csv', '')
@@ -145,7 +146,7 @@ def generate_deck_package(csv_path, subject_folder):
         print(f"   ❌ Erreur écriture .apkg : {e}")
         return False
 
-def main():
+def main() -> None:
     print("="*60)
     print("🚀 GÉNÉRATION DES PAQUETS ANKI (.apkg)")
     print("="*60)

@@ -1,0 +1,43 @@
+Question;Réponse
+Définition : Quand dit-on que la suite \(u\) est négligeable devant la suite \(v\) (noté \(u_n = o(v_n)\)) ? (Hypothèse : \(v\) ne s'annule pas à partir d'un certain rang);On dit que \(u\) est négligeable devant \(v\) si : \(\frac{u_n}{v_n} \xrightarrow[n \to +\infty]{} 0\).
+Proposition : Comparaison de croissances entre \((\ln n)^\beta\) et \(n^\alpha\) pour \(\alpha > 0\) et \(\beta \in \mathbb{R}\).;\((\ln n)^\beta \underset{n \to +\infty}{=} o(n^\alpha)\).
+Proposition : Comparaison de croissances entre \(n^\beta\) et \(e^{\alpha n}\) pour \(\alpha > 0\) et \(\beta \in \mathbb{R}\).;\(n^\beta \underset{n \to +\infty}{=} o(e^{\alpha n})\).
+Proposition : Comparaison de croissances entre \(n^\beta\) et \(a^n\) pour \(\beta \in \mathbb{R}\) et \(a > 1\).;\(n^\beta \underset{n \to +\infty}{=} o(a^n)\).
+Proposition : Comparaison de croissances entre \(a^n\) et \(b^n\) pour \((a, b) \in \mathbb{R}^2\) avec \(|a| < |b|\).;\(a^n \underset{n \to +\infty}{=} o(b^n)\).
+Proposition : Comparaison de croissances entre \(a^n\) et \(n!\) pour \(a \in \mathbb{R}\).;\(a^n \underset{n \to +\infty}{=} o(n!)\).
+Proposition : Comparaison de croissances entre \(n!\) et \(n^n\).;\(n! \underset{n \to +\infty}{=} o(n^n)\).
+Proposition : Propriété de la multiplication par un scalaire pour les suites négligeables (si \(u_n = o(v_n)\) et \(\lambda \neq 0\)).;\(u_n \underset{n \to +\infty}{=} o(\lambda v_n)\).
+Proposition : Propriété de la somme pour les suites négligeables (si \(u_n = o(w_n)\) et \(v_n = o(w_n)\)).;\(u_n + v_n \underset{n \to +\infty}{=} o(w_n)\).
+Proposition : Propriété du produit pour les suites négligeables (si \(u_n = o(v_n)\)).;\(t_n u_n \underset{n \to +\infty}{=} o(t_n v_n)\).
+Proposition : Propriété du produit pour les suites négligeables (si \(u_n = o(v_n)\) et \(t_n = o(w_n)\)).;\(u_n t_n \underset{n \to +\infty}{=} o(v_n w_n)\).
+Proposition : Propriété de transitivité pour les suites négligeables (si \(u_n = o(v_n)\) et \(v_n = o(w_n)\)).;\(u_n \underset{n \to +\infty}{=} o(w_n)\).
+Proposition : Que signifie \(u_n \underset{n \to +\infty}{=} o(1)\) ?;Cela signifie que \(u_n \xrightarrow[n \to +\infty]{} 0\).
+Proposition : Que peut-on dire si \(u_n \underset{n \to +\infty}{=} o(v_n)\) avec \(v_n \xrightarrow[n \to +\infty]{} 0\) ?;Alors \(u_n \xrightarrow[n \to +\infty]{} 0\) aussi.
+Définition : Quand dit-on que la suite \(u\) est équivalente à la suite \(v\) (noté \(u_n \sim v_n\)) ?;Lorsque \(u_n \underset{n \to +\infty}{=} v_n + o(v_n)\).
+Proposition : Lien entre équivalence et limite pour les suites (si \(u_n \sim v_n\)).;Si \((v_n)\) admet une limite (finie ou infinie) alors \((u_n)\) admet la même limite.
+Proposition : Lien entre équivalence et signe pour les suites (si \(u_n \sim v_n\) et \(v_n \neq 0\) pour tout \(n\)).;\(\exists N \in \mathbb{N}, \forall n \geq N, u_n \neq 0\) (ils ont le même signe à partir d'un certain rang).
+Proposition : Lien entre équivalence et positivité stricte pour les suites (si \(u_n \sim v_n\) et \(v_n > 0\) pour tout \(n\)).;\(\exists N \in \mathbb{N}, \forall n \geq N, u_n > 0\).
+Définition : Que signifie qu'une fonction \(f\) vérifie une propriété \(\mathcal{P}\) au voisinage de \(a \in \mathbb{R}\) ?;\(f\) doit vérifier \(\mathcal{P}\) sur \(]a-\eta, a+\eta[ \cap I\) pour un \(\eta > 0\) fixé.
+Définition : Que signifie qu'une fonction \(f\) vérifie une propriété \(\mathcal{P}\) au voisinage de \(+\infty\) ?;\(f\) doit vérifier \(\mathcal{P}\) sur \(]A, +\infty[ \cap I\) pour un \(A \in \mathbb{R}\) fixé.
+Définition : Que signifie qu'une fonction \(f\) vérifie une propriété \(\mathcal{P}\) au voisinage de \(-\infty\) ?;\(f\) doit vérifier \(\mathcal{P}\) sur \(]-\infty, B[ \cap I\) pour un \(B \in \mathbb{R}\) fixé.
+Définition : Quand dit-on que la fonction \(f\) est négligeable devant \(g\) au voisinage de \(a\) ? (Hypothèse : \(g\) ne s'annule pas au voisinage de \(a\) sauf peut-être en \(a\));Si \(\lim_{x \to a} \frac{f(x)}{g(x)} = 0\).
+Proposition : Comparaison de puissances \(x^\alpha\) et \(x^\beta\) (avec \(\alpha < \beta\)).;\(x^\alpha \underset{x \to +\infty}{=} o(x^\beta)\) et \(x^\beta \underset{x \to 0}{=} o(x^\alpha)\).
+Proposition : Croissance comparée en \(+\infty\) entre \((\ln x)^\beta\) et \(x^\alpha\) (pour \(\alpha > 0\)).;\((\ln x)^\beta \underset{x \to +\infty}{=} o(x^\alpha)\).
+Proposition : Croissance comparée en \(+\infty\) entre \(x^\beta\) et \(e^{\alpha x}\) (pour \(\alpha > 0\)).;\(x^\beta \underset{x \to +\infty}{=} o(e^{\alpha x})\).
+Proposition : Croissance comparée en \(+\infty\) entre \(x^\beta\) et \(a^x\) (pour \(a > 1\)).;\(x^\beta \underset{x \to +\infty}{=} o(a^x)\).
+Proposition : Propriété de la multiplication par un scalaire pour les fonctions négligeables (si \(f(x) = o(g(x))\) et \(\lambda \neq 0\)).;\(f(x) \underset{x \to a}{=} o(\lambda g(x))\).
+Proposition : Propriété de la somme pour les fonctions négligeables (si \(f(x) = o(h(x))\) et \(g(x) = o(h(x))\)).;\(f(x) + g(x) \underset{x \to a}{=} o(h(x))\).
+Proposition : Propriété du produit pour les fonctions négligeables (si \(f(x) = o(g(x))\)).;\(h(x)f(x) \underset{x \to a}{=} o(h(x)g(x))\).
+Proposition : Propriété du produit pour les fonctions négligeables (si \(f(x) = o(g(x))\) et \(u(x) = o(v(x))\)).;\(f(x)u(x) \underset{x \to a}{=} o(g(x)v(x))\).
+Proposition : Propriété de transitivité pour les fonctions négligeables (si \(f(x) = o(g(x))\) et \(g(x) = o(h(x))\)).;\(f(x) \underset{x \to a}{=} o(h(x))\).
+Proposition : Équivalence entre \(f(x) = o(1)\) et sa limite en \(a\).;\(f(x) \underset{x \to a}{=} o(1) \iff f(x) \xrightarrow[x \to a]{} 0\).
+Proposition : Conséquence sur la limite si \(f(x) = o(g(x))\) et \(g(x) \to 0\) en \(a\).;Alors \(f(x) \xrightarrow[x \to a]{} 0\) aussi.
+Définition : Quand dit-on que la fonction \(f\) est équivalente à \(g\) au voisinage de \(a\) (noté \(f(x) \sim g(x)\)) ?;Si \(f(x) \underset{x \to a}{=} g(x) + o(g(x))\).
+Proposition : Lien entre équivalence et limite pour les fonctions (si \(f(x) \sim g(x)\) en \(a\)).;Si \(g\) admet une limite (finie ou infinie) en \(a\) alors \(f\) admet la même limite en \(a\).
+Proposition : Lien entre équivalence et non-nullité locale (si \(f(x) \sim g(x)\) en \(a\)).;Si, pour tout \(x \in I, g(x) \neq 0\) alors, au voisinage de \(a, f(x) \neq 0\).
+Proposition : Lien entre équivalence et signe local (si \(f(x) \sim g(x)\) en \(a\)).;Si, pour tout \(x \in I, g(x) > 0\) alors, au voisinage de \(a, f(x) > 0\).
+Proposition-définition : Qu'est-ce qu'un développement limité (DL) à l'ordre \(n\) en 0 pour \(f\) ?;C'est l'existence de réels \(a_0, \dots, a_n\) tels que : \(f(x) \underset{x \to 0}{=} \sum_{k=0}^n a_k x^k + o(x^n)\).
+Définition : Comment appelle-t-on le polynôme \(P_n(x) = \sum_{k=0}^n a_k x^k\) dans un DL en 0 ?;C'est la partie régulière ou partie principale du DL d'ordre \(n\) de \(f\) en 0.
+Proposition : Propriété de troncature d'un DL (si \(f\) a un DL à l'ordre \(n\) et \(0 \leq p \leq n\)).;Alors \(f\) admet un DL à l'ordre \(p\) en 0 donné par : \(f(x) = a_0 + \dots + a_px^p + o(x^p)\).
+Proposition-définition : Qu'est-ce qu'un développement limité (DL) à l'ordre \(n\) en \(x_0\) pour \(f\) ?;C'est l'existence de réels \(a_0, \dots, a_n\) tels que : \(f(x) = \sum_{k=0}^n a_k(x-x_0)^k + o((x-x_0)^n)\).
+Remarque : Unicité du développement limité.;Lorsque le DL d'ordre \(n\) en \(x_0\) existe, il est unique.

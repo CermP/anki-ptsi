@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anki PTSI — Téléchargement des Decks</title>
+    <meta name="description" content="Téléchargez les decks Anki pour la PTSI.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/GlassSurface.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="glass-navbar">
+        <a href="index.html" class="glass-brand">Anki PTSI</a>
+        <div class="glass-nav-links">
+            <a href="index.html" class="glass-nav-link">Accueil</a>
+            <a href="decks.html" class="glass-nav-link active">Decks</a>
+            <a href="https://github.com/CermP/anki-ptsi" target="_blank" class="glass-nav-link">GitHub</a>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container hero-content">
+            <h1 class="hero-title">Anki PTSI</h1>
+            <p class="hero-subtitle">Mémorisez vos cours efficacement.</p>
+
+            <div class="search-container">
+                <div class="search-control">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"
+                            style="width: 1.25rem; height: 1.25rem;">
+                            <path fill-rule="evenodd"
+                                d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher...">
+                    <div class="search-shortcut">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"
+                            style="width: 1.25rem; height: 1.25rem;">
+                            <path fill-rule="evenodd"
+                                d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-badge"><strong>{{ total_decks }}</strong> Decks</div>
+                <div class="stat-badge"><strong>{{ total_subjects }}</strong> Matières</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        {% if not data %}
+        <div class="empty-state">
+            <h2>Aucun deck disponible</h2>
+        </div>
+        {% else %}
+        <div id="no-results" class="no-results" style="display: none;">
+            <h3>Aucun résultat trouvé.</h3>
+        </div>
+
+        {% for subject, decks in data|dictsort %}
+        <section class="subject-section">
+            <div class="subject-header">
+                <span class="subject-icon"></span>
+                <h2 class="subject-title">{{ subject }}</h2>
+            </div>
+            <div class="deck-grid">
+                {% for deck in decks %}
+                <div class="deck-card">
+                    <div class="deck-info">
+                        <h3 class="deck-name">{{ deck.name }}</h3>
+                        <div class="deck-meta">
+                            <span>{{ deck.date }}</span>
+                            <span>{{ deck.size }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ deck.url }}" class="download-btn" download>Télécharger</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Projet open source maintenu par <a href="https://github.com/CermP/anki-ptsi" target="_blank"
+                    rel="noopener">CermP</a></p>
+            <p class="footer-note">Contribuez sur GitHub pour ajouter vos propres decks !</p>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

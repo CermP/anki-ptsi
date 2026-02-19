@@ -4,10 +4,11 @@ import urllib.request
 import unicodedata
 import re
 import os
+from typing import Any, Dict, Optional
 
-ANKI_CONNECT_URL = "http://localhost:8765"
+ANKI_CONNECT_URL: str = "http://localhost:8765"
 
-def anki_connect_request(action, **params):
+def anki_connect_request(action: str, **params: Any) -> Optional[Dict[str, Any]]:
     """
     Communiquer avec Anki via l'add-on AnkiConnect.
     """
@@ -36,7 +37,7 @@ def anki_connect_request(action, **params):
         print("Vérifiez qu'Anki est ouvert et que l'add-on AnkiConnect est installé.")
         return None
 
-def slugify(value):
+def slugify(value: str) -> str:
     """
     Normalise une chaîne de caractères pour l'utiliser dans les noms de fichiers ou d'ID.
     Supprime les accents et remplace les caractères spéciaux.

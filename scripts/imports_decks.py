@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import base64
+from typing import List, Dict, Any, Optional
 from utils import anki_connect_request
 
 # --- CONFIGURATION ---
@@ -16,7 +17,7 @@ BASE_DIR = os.path.dirname(SCRIPT_DIR)
 DECKS_DIR = os.path.join(BASE_DIR, "decks")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
-def get_anki_model():
+def get_anki_model() -> Optional[str]:
     """Récupère le premier modèle disponible."""
     response = anki_connect_request("modelNames")
     if not response:
@@ -32,7 +33,7 @@ def get_anki_model():
     print(f"  📋 Utilisation du modèle : {chosen}")
     return chosen
 
-def get_model_fields(model_name):
+def get_model_fields(model_name: str) -> Optional[List[str]]:
     """Récupère les champs du modèle."""
     response = anki_connect_request("modelFieldNames", modelName=model_name)
     if not response:
@@ -46,7 +47,7 @@ def get_model_fields(model_name):
     print(f"  ❌ Impossible de récupérer les champs de {model_name}")
     return None
 
-def store_media_file(filename, subfolder):
+def store_media_file(filename: str, subfolder: str) -> bool:
     """Envoie un fichier média à Anki."""
     # Check in subfolder first, then root
     filepath = os.path.join(MEDIA_DIR, subfolder, filename)
@@ -64,7 +65,7 @@ def store_media_file(filename, subfolder):
     except Exception:
         return False
 
-def process_text_images(text, subfolder):
+def process_text_images(text: str, subfolder: str) -> str:
     """
     1. Trouve les images src="..." dans le texte.
     2. Les envoie à Anki.
@@ -89,7 +90,7 @@ def process_text_images(text, subfolder):
     
     return text
 
-def parse_csv_file(csv_path, deck_name, subfolder, model_name, fields):
+def parse_csv_file(csv_path: str, deck_name: str, subfolder: str, model_name: str, fields: List[str]) -> List[Dict[str, Any]]:
     """Lit le CSV et retourne une liste de notes pour Anki."""
     notes = []
     
@@ -133,7 +134,7 @@ def parse_csv_file(csv_path, deck_name, subfolder, model_name, fields):
         
     return notes
 
-def import_file(csv_path, model_name, field_names):
+def import_file(csv_path: str, model_name: str, field_names: List[str]) -> None:
     """Importe un fichier CSV spécifique."""
     filename = os.path.basename(csv_path)
     deck_name = filename.replace('.csv', '').replace('-', '::').replace('_', ' ')
@@ -155,7 +156,7 @@ def import_file(csv_path, model_name, field_names):
     else:
         print("   ⚠️  Aucune carte importée.")
 
-def interactive_mode(model_name, field_names):
+def interactive_mode(model_name: str, field_names: List[str]) -> None:
     """Mode interactif pour choisir les fichiers."""
     csv_files = []
     for root, _, files in os.walk(DECKS_DIR):
@@ -192,7 +193,7 @@ def interactive_mode(model_name, field_names):
     for path in to_import:
         import_file(path, model_name, field_names)
 
-def main():
+def main() -> None:
     # Check connection
     if not anki_connect_request("version"):
         print("\n❌ AnkiConnect n'est pas accessible. Lancez Anki.")

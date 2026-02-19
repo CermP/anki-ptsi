@@ -6,6 +6,8 @@ import os
 import shutil
 import html
 import re
+import argparse
+from typing import List, Optional, Dict, Any
 from utils import slugify, anki_connect_request
 
 # --- CONFIGURATION ---
@@ -17,10 +19,12 @@ OUTPUT_DIR = os.path.join(BASE_DIR, "decks")
 MEDIA_REPO_DIR = os.path.join(BASE_DIR, "media")
 
 # Paths specific to the user's Anki installation
-ANKI_USER_PROFILE = "Utilisateur 1"
-ANKI_MEDIA_PATH = os.path.expanduser(f"~/Library/Application Support/Anki2/{ANKI_USER_PROFILE}/collection.media")
+DEFAULT_ANKI_USER_PROFILE = "Utilisateur 1"
 
-def copy_media_files(source_text, media_subfolder):
+def get_anki_media_path(profile: str) -> str:
+    return os.path.expanduser(f"~/Library/Application Support/Anki2/{profile}/collection.media")
+
+def copy_media_files(source_text: str, media_subfolder: str, anki_media_path: str) -> str:
     """
     Cherche les références aux médias dans le texte.
     Les copie du dossier Anki vers le repo.
@@ -38,7 +42,7 @@ def copy_media_files(source_text, media_subfolder):
     
     for match in matches:
         filename = match[0]
-        anki_file_path = os.path.join(ANKI_MEDIA_PATH, filename)
+        anki_file_path = os.path.join(anki_media_path, filename)
         
         if os.path.exists(anki_file_path):
             # Copier le fichier
@@ -62,7 +66,7 @@ def copy_media_files(source_text, media_subfolder):
             
     return modified_text
 
-def export_deck(deck_name):
+def export_deck(deck_name: str, anki_media_path: str) -> None:
     """Exporte un deck spécifique en CSV + média."""
     print(f"📦 Export de '{deck_name}'...")
     
@@ -110,7 +114,7 @@ def export_deck(deck_name):
                     clean_value = html.unescape(raw_value)
                     
                     # Copy media and update paths
-                    minified_value = copy_media_files(clean_value, media_subfolder)
+                    minified_value = copy_media_files(clean_value, media_subfolder, anki_media_path)
                     fields_values.append(minified_value)
                 
                 # Process tags
@@ -125,9 +129,17 @@ def export_deck(deck_name):
     except Exception as e:
         print(f"❌ ERREUR écriture CSV : {e}\n")
 
-def main():
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Export Anki decks to CSV and extract media.")
+    parser.add_argument("--profile", type=str, default=DEFAULT_ANKI_USER_PROFILE,
+                        help="Anki user profile name (default: Utilisateur 1)")
+    args = parser.parse_args()
+    
+    anki_media_path = get_anki_media_path(args.profile)
+
     print("="*60)
     print("📤 EXPORT DECKS + MÉDIAS")
+    print(f"👤 Profil Anki : {args.profile}")
     print("="*60)
     
     # Get deck list
@@ -160,7 +172,7 @@ def main():
     print(f"\nDébut de l'export pour {len(target_decks)} deck(s)...\n")
     
     for deck in target_decks:
-        export_deck(deck)
+        export_deck(deck, anki_media_path)
         
     print("="*60)
     print("Terminé ! N'oublie pas : git add . && git commit && git push")
